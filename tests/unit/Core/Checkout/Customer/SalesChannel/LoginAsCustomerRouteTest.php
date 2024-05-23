@@ -4,7 +4,6 @@ namespace Shopware\Tests\Unit\Core\Checkout\Customer\SalesChannel;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Checkout\Customer\LoginAsCustomerTokenGenerator;
 use Shopware\Core\Checkout\Customer\SalesChannel\AccountService;
 use Shopware\Core\Checkout\Customer\SalesChannel\LoginAsCustomerRoute;
@@ -29,34 +28,29 @@ class LoginAsCustomerRouteTest extends TestCase
         $customerId = Uuid::randomHex();
         $userId = Uuid::randomHex();
 
-        $customerEntity = new CustomerEntity();
-        $customerEntity->setDoubleOptInRegistration(false);
-        $customerEntity->setId($customerId);
-        $customerEntity->setEmail('customer@example.com');
-        $customerEntity->setGuest(false);
+        $loginAsCustomerTokenGenerator = new LoginAsCustomerTokenGenerator('testAppSecret');
 
-        $dispatcher = $this->createMock(EventDispatcherInterface::class);
-
-        $loginAsCustomerTokenGenerator = $this->createMock(LoginAsCustomerTokenGenerator::class);
+        $token = $loginAsCustomerTokenGenerator->generate(
+            TestDefaults::SALES_CHANNEL,
+            $customerId,
+            $userId
+        );
 
         $route = new LoginAsCustomerRoute(
             $this->createMock(AccountService::class),
             $loginAsCustomerTokenGenerator,
-            $dispatcher,
+            $this->createMock(EventDispatcherInterface::class),
             $this->createMock(DataValidator::class),
         );
 
-        $salesChannelContext = $this->createMock(SalesChannelContext::class);
-        $salesChannelContext->method('getSalesChannelId')->willReturn(TestDefaults::SALES_CHANNEL);
-
-        $loginAsCustomerTokenGenerator->method('validate')->willReturn(true);
-
         $dataBag = new RequestDataBag([
-            LoginAsCustomerRoute::TOKEN => 'token-1',
+            LoginAsCustomerRoute::TOKEN => $token,
             LoginAsCustomerRoute::SALES_CHANNEL_ID => TestDefaults::SALES_CHANNEL,
             LoginAsCustomerRoute::CUSTOMER_ID => $customerId,
             LoginAsCustomerRoute::USER_ID => $userId,
         ]);
+
+        $salesChannelContext = $this->createMock(SalesChannelContext::class);
 
         $response = $route->loginAsCustomer($dataBag, $salesChannelContext);
 

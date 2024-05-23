@@ -70,16 +70,6 @@ class CustomerException extends HttpException
         );
     }
 
-    public static function invalidToken(string $token): InvalidLoginAsCustomerTokenException
-    {
-        return new InvalidLoginAsCustomerTokenException(
-            Response::HTTP_BAD_REQUEST,
-            self::LOGIN_AS_CUSTOMER_INVALID_TOKEN_CODE,
-            'The token "{{ token }}" is invalid.',
-            ['token' => $token]
-        );
-    }
-
     public static function groupRequestNotFound(string $id): self
     {
         return new self(
@@ -310,5 +300,10 @@ class CustomerException extends HttpException
     public static function passwordPoliciesUpdated(): PasswordPoliciesUpdatedException
     {
         return new PasswordPoliciesUpdatedException();
+    }
+
+    public static function invalidToken(string $token): InvalidLoginAsCustomerTokenException
+    {
+        return new InvalidLoginAsCustomerTokenException($token);
     }
 }

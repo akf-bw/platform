@@ -22,6 +22,8 @@ class LoginAsCustomerTokenGeneratorTest extends TestCase
 
     private const CUSTOMER_ID = 'bcf76884cb764eb2b9650bb2fcf1073e';
 
+    private const USER_ID = 'bcf76884cb764eb2b9650bb2fcf1073f';
+
     protected function setUp(): void
     {
         $this->tokenGenerator = new LoginAsCustomerTokenGenerator('testAppSecret');
@@ -29,21 +31,21 @@ class LoginAsCustomerTokenGeneratorTest extends TestCase
 
     public function testGenerate(): void
     {
-        $token = $this->tokenGenerator->generate(self::SALES_CHANNEL_ID, self::CUSTOMER_ID);
+        $token = $this->tokenGenerator->generate(self::SALES_CHANNEL_ID, self::CUSTOMER_ID, self::USER_ID);
 
-        static::assertSame('d2b1c079eeac83a65a2a07318e85cab9e7fe7851b4a06f7fea6a7b3b9ff85979', $token);
+        static::assertSame('851923ad26ff2a45eee0b21155506921ea6f40e942c1ee22844ef4e5917cb454', $token);
     }
 
     #[DoesNotPerformAssertions]
     public function testValidate(): void
     {
-        $this->tokenGenerator->validate('d2b1c079eeac83a65a2a07318e85cab9e7fe7851b4a06f7fea6a7b3b9ff85979', self::SALES_CHANNEL_ID, self::CUSTOMER_ID);
+        $this->tokenGenerator->validate('851923ad26ff2a45eee0b21155506921ea6f40e942c1ee22844ef4e5917cb454', self::SALES_CHANNEL_ID, self::CUSTOMER_ID, self::USER_ID);
     }
 
     public function testValidateWithInvalidToken(): void
     {
         $this->expectException(InvalidLoginAsCustomerTokenException::class);
 
-        $this->tokenGenerator->validate('invalidToken', self::SALES_CHANNEL_ID, self::CUSTOMER_ID);
+        $this->tokenGenerator->validate('invalidToken', self::SALES_CHANNEL_ID, self::CUSTOMER_ID, self::USER_ID);
     }
 }
