@@ -20,6 +20,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Shopware\Core\Framework\Feature;
 use Shopware\Core\Framework\Log\Package;
+use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\Framework\Uuid\Exception\InvalidUuidException;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\Validation\WriteConstraintViolationException;
@@ -30,7 +31,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Validator\ConstraintViolation;
 
 #[Package('checkout')]
-class AccountService
+class AccountService extends AbstractAccountService
 {
     /**
      * @internal
@@ -42,6 +43,11 @@ class AccountService
         private readonly AbstractSwitchDefaultAddressRoute $switchDefaultAddressRoute,
         private readonly CartRestorer $restorer
     ) {
+    }
+
+    public function getDecorated(): AbstractAccountService
+    {
+        throw new DecorationPatternException(self::class);
     }
 
     /**
@@ -90,13 +96,13 @@ class AccountService
      * @throws BadCredentialsException
      * @throws CustomerNotFoundByIdException
      */
-    public function loginById(string $id, SalesChannelContext $context): string
+    public function loginById(string $id, SalesChannelContext $context, ?string $forcedSalesChannelId = null, ?string $userId = null): string
     {
         if (!Uuid::isValid($id)) {
             throw CustomerException::badCredentials();
         }
 
-        $customer = $this->fetchCustomer(new Criteria([$id]), $context, true);
+        $customer = $this->fetchCustomer(new Criteria([$id]), $context, $forcedSalesChannelId ?? $context->getSalesChannelId(), true);
         if ($customer === null) {
             // @deprecated tag:v6.7.0 - remove this if block
             if (!Feature::isActive('v6.7.0.0')) {
@@ -107,10 +113,10 @@ class AccountService
             throw CustomerException::customerNotFoundByIdException($id);
         }
 
-        $event = new CustomerBeforeLoginEvent($context, $customer->getEmail());
+        $event = new CustomerBeforeLoginEvent($context, $customer->getEmail(), $userId);
         $this->eventDispatcher->dispatch($event);
 
-        return $this->loginByCustomer($customer, $context);
+        return $this->loginByCustomer($customer, $context, $userId);
     }
 
     /**
@@ -169,7 +175,7 @@ class AccountService
         return !$customer->getDoubleOptInRegistration() || $customer->getDoubleOptInConfirmDate();
     }
 
-    private function loginByCustomer(CustomerEntity $customer, SalesChannelContext $context): string
+    private function loginByCustomer(CustomerEntity $customer, SalesChannelContext $context, ?string $userId = null): string
     {
         $this->customerRepository->update([
             [
@@ -181,7 +187,7 @@ class AccountService
         $context = $this->restorer->restore($customer->getId(), $context);
         $newToken = $context->getToken();
 
-        $event = new CustomerLoginEvent($context, $customer, $newToken);
+        $event = new CustomerLoginEvent($context, $customer, $newToken, $userId);
         $this->eventDispatcher->dispatch($event);
 
         return $newToken;
@@ -197,7 +203,7 @@ class AccountService
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('email', $email));
 
-        $customer = $this->fetchCustomer($criteria, $context, $includeGuest);
+        $customer = $this->fetchCustomer($criteria, $context, $context->getSalesChannelId(), $includeGuest);
         if ($customer === null) {
             throw CustomerException::customerNotFound($email);
         }
@@ -212,12 +218,12 @@ class AccountService
      * should be done via PHP because it's a lot faster to filter a few entities on PHP side with the same email
      * address, than to filter a huge numbers of rows in the DB on a not indexed column.
      */
-    private function fetchCustomer(Criteria $criteria, SalesChannelContext $context, bool $includeGuest = false): ?CustomerEntity
+    private function fetchCustomer(Criteria $criteria, SalesChannelContext $context, string $salesChannelId, bool $includeGuest = false): ?CustomerEntity
     {
         $criteria->setTitle('account-service::fetchCustomer');
 
         $result = $this->customerRepository->search($criteria, $context->getContext());
-        $result = $result->filter(function (CustomerEntity $customer) use ($includeGuest, $context): ?bool {
+        $result = $result->filter(function (CustomerEntity $customer) use ($includeGuest, $salesChannelId): ?bool {
             // Skip not active users
             if (!$customer->getActive()) {
                 return null;
@@ -234,7 +240,7 @@ class AccountService
             }
 
             // It is bound, but not to the current one. Skip it
-            if ($customer->getBoundSalesChannelId() !== $context->getSalesChannel()->getId()) {
+            if ($customer->getBoundSalesChannelId() !== $salesChannelId) {
                 return null;
             }
 

@@ -587,6 +587,63 @@
                 ]
             }
         },
+        "/account/login/customer": {
+            "post": {
+                "tags": ["Login & Registration"],
+                "summary": "Log in as a customer by token",
+                "description": "Logs in customers given the a generated token.",
+                "operationId": "loginAsCustomer",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": ["token", "salesChannelId", "customerId", "userId"],
+                                "properties": {
+                                    "token": {
+                                        "description": "Login-Token",
+                                        "type": "string"
+                                    },
+                                    "salesChannelId": {
+                                        "description": "ID of the sales channel",
+                                        "type": "string"
+                                    },
+                                    "customerId": {
+                                        "description": "ID of the customer",
+                                        "type": "string"
+                                    },
+                                    "userId": {
+                                        "description": "ID of the user",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ContextTokenResponse"
+                    },
+                    "400": {
+                        "description": "If the token is incorrect an error is returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/failure"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ]
+            }
+        },
         "/account/logout": {
             "post": {
                 "tags": ["Login & Registration"],

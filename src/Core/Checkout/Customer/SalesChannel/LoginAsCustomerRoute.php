@@ -2,46 +2,40 @@
 
 namespace Shopware\Core\Checkout\Customer\SalesChannel;
 
-use Shopware\Core\Checkout\Customer\CustomerCollection;
-use Shopware\Core\Checkout\Customer\CustomerEntity;
-use Shopware\Core\Checkout\Customer\CustomerException;
-use Shopware\Core\Checkout\Customer\Event\CustomerBeforeLoginEvent;
-use Shopware\Core\Checkout\Customer\Event\CustomerLoginEvent;
-use Shopware\Core\Checkout\Customer\Exception\CustomerNotFoundByIdException;
 use Shopware\Core\Checkout\Customer\LoginAsCustomerTokenGenerator;
-use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Shopware\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Shopware\Core\Framework\Validation\BuildValidationEvent;
+use Shopware\Core\Framework\Validation\Constraint\Uuid;
+use Shopware\Core\Framework\Validation\DataBag\DataBag;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
-use Shopware\Core\System\SalesChannel\Context\CartRestorer;
+use Shopware\Core\Framework\Validation\DataValidationDefinition;
+use Shopware\Core\Framework\Validation\DataValidator;
+use Shopware\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Shopware\Core\System\SalesChannel\ContextTokenResponse;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[Route(defaults: ['_routeScope' => ['store-api'], '_contextTokenRequired' => false])]
 #[Package('checkout')]
 class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
 {
-    public const CUSTOMER_ID = 'customerId';
-
-    public const SALES_CHANNEL_ID = 'salesChannelId';
-
-    public const TOKEN = 'token';
+    final public const TOKEN = 'token';
+    final public const SALES_CHANNEL_ID = 'salesChannelId';
+    final public const CUSTOMER_ID = 'customerId';
+    final public const USER_ID = 'userId';
 
     /**
      * @internal
-     *
-     * @param EntityRepository<CustomerCollection> $customerRepository
      */
     public function __construct(
+        private readonly AbstractAccountService $accountService,
+        private readonly LoginAsCustomerTokenGenerator $tokenGenerator,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly EntityRepository $customerRepository,
-        private readonly CartRestorer $restorer,
-        private readonly LoginAsCustomerTokenGenerator $tokenGenerator
+        private readonly DataValidator $validator
     ) {
     }
 
@@ -51,50 +45,40 @@ class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
     }
 
     #[Route(path: '/store-api/account/login/customer', name: 'store-api.account.login-as-customer', methods: ['POST'])]
-    public function loginAsCustomer(RequestDataBag $data, SalesChannelContext $context): ContextTokenResponse
+    public function loginAsCustomer(RequestDataBag $requestDataBag, SalesChannelContext $context): ContextTokenResponse
     {
-        // TODO: find better way to handle this
+        $this->validateRequestDataFields($requestDataBag, $context);
 
-        if (!$data->has(self::CUSTOMER_ID)) {
-            throw CustomerException::missingCustomerId();
-        }
+        $token = $requestDataBag->getString(self::TOKEN);
+        $salesChannelId = $requestDataBag->getString(self::SALES_CHANNEL_ID);
+        $customerId = $requestDataBag->getString(self::CUSTOMER_ID);
+        $userId = $requestDataBag->getString(self::USER_ID);
 
-        if (!$data->has(self::TOKEN)) {
-            throw CustomerException::missingToken();
-        }
+        $this->tokenGenerator->validate($token, $salesChannelId, $customerId, $userId);
 
-        $customerId = (string) $data->get(self::CUSTOMER_ID);
-        $token = (string) $data->get(self::TOKEN);
-
-        $this->tokenGenerator->validate($token, $context->getSalesChannelId(), $customerId);
-
-        $customer = $this->fetchCustomer($customerId, $context->getContext());
-
-        $event = new CustomerBeforeLoginEvent($context, $customer->getEmail());
-        $this->eventDispatcher->dispatch($event);
-
-        $restoredCart = $this->restorer->restore($customer->getId(), $context);
-
-        $newToken = $restoredCart->getToken();
-
-        $event = new CustomerLoginEvent($context, $customer, $newToken);
-        $this->eventDispatcher->dispatch($event);
+        $newToken = $this->accountService->loginById($customerId, $context, $salesChannelId, $userId);
 
         return new ContextTokenResponse($newToken);
     }
 
     /**
-     * @throws InconsistentCriteriaIdsException
-     * @throws CustomerNotFoundByIdException
+     * @throws ConstraintViolationException
      */
-    private function fetchCustomer(string $customerId, Context $context): CustomerEntity
+    private function validateRequestDataFields(DataBag $data, SalesChannelContext $context): void
     {
-        $customer = $this->customerRepository->search(new Criteria([$customerId]), $context)->get($customerId);
+        $definition = new DataValidationDefinition('login.impersonation');
 
-        if (!($customer instanceof CustomerEntity)) {
-            throw CustomerException::customerNotFoundById($customerId);
-        }
+        $frameworkContext = $context->getContext();
 
-        return $customer;
+        $definition
+            ->add(self::TOKEN, new NotBlank())
+            ->add(self::SALES_CHANNEL_ID, new Uuid(), new EntityExists(['entity' => 'sales_channel', 'context' => $frameworkContext]))
+            ->add(self::CUSTOMER_ID, new Uuid(), new EntityExists(['entity' => 'customer', 'context' => $frameworkContext]))
+            ->add(self::USER_ID, new Uuid(), new EntityExists(['entity' => 'user', 'context' => $frameworkContext]));
+
+        $validationEvent = new BuildValidationEvent($definition, $data, $frameworkContext);
+        $this->eventDispatcher->dispatch($validationEvent, $validationEvent->getName());
+
+        $this->validator->validate($data->all(), $definition);
     }
 }

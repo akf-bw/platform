@@ -37,6 +37,10 @@ export default {
             return this.repositoryFactory.create('sales_channel_domain');
         },
 
+        currentUser() {
+            return Shopware.State.get('session').currentUser;
+        },
+
         salesChannelDomainCriteria() {
             const criteria = new Criteria();
             criteria.addAssociation('salesChannel');
@@ -71,6 +75,7 @@ export default {
                         handledResponse.token,
                         salesChannelId,
                         this.customer.id,
+                        this.currentUser?.id,
                     ),
                 );
             }).catch(() => {
@@ -93,8 +98,8 @@ export default {
             });
         },
 
-        buildSalesChannelUrl(salesChannelDomainUrl, token, salesChannelId, customerId) {
-            return `${salesChannelDomainUrl}/account/login/customer/${token}/${salesChannelId}/${customerId}`;
+        buildSalesChannelUrl(salesChannelDomainUrl, token, salesChannelId, customerId, userId) {
+            return `${salesChannelDomainUrl}/account/login/customer/${token}/${salesChannelId}/${customerId}/${userId}`;
         },
     },
 };

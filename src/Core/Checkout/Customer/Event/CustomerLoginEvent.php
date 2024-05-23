@@ -28,7 +28,8 @@ class CustomerLoginEvent extends Event implements SalesChannelAware, ShopwareSal
     public function __construct(
         private readonly SalesChannelContext $salesChannelContext,
         private readonly CustomerEntity $customer,
-        private readonly string $contextToken
+        private readonly string $contextToken,
+        private readonly ?string $userId = null,
     ) {
     }
 
@@ -65,6 +66,11 @@ class CustomerLoginEvent extends Event implements SalesChannelAware, ShopwareSal
     public function getContextToken(): string
     {
         return $this->contextToken;
+    }
+
+    public function getUserId(): ?string
+    {
+        return $this->userId;
     }
 
     public function getSalesChannelId(): string

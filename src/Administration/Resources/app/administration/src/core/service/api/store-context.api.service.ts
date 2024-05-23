@@ -66,9 +66,7 @@ class StoreContextService extends ApiService {
         additionalHeaders = {},
     ) {
         const route = '_proxy/login-as-customer-token-generate';
-        const headers = {
-            ...this.getBasicHeaders(additionalHeaders),
-        };
+        const headers = this.getBasicHeaders(additionalHeaders);
 
         return this.httpClient
             .post(
@@ -77,7 +75,7 @@ class StoreContextService extends ApiService {
                     customerId,
                     salesChannelId,
                 },
-                { additionalParams, headers },
+                { ...additionalParams, headers },
             );
     }
 }

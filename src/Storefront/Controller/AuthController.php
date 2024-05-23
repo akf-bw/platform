@@ -318,21 +318,22 @@ class AuthController extends StorefrontController
         return $this->redirectToRoute('frontend.account.profile.page');
     }
 
-    #[Route(path: '/account/login/customer/{token}/{salesChannelId}/{customerId}', name: 'frontend.account.login.customer', methods: ['GET'])]
-    public function loginAsCustomer(string $token, string $salesChannelId, string $customerId, SalesChannelContext $context, Request $request): Response
+    #[Route(path: '/account/login/customer/{token}/{salesChannelId}/{customerId}/{userId}', name: 'frontend.account.login.customer', methods: ['GET'])]
+    public function loginAsCustomer(string $token, string $salesChannelId, string $customerId, string $userId, SalesChannelContext $context, Request $request): Response
     {
         try {
             $dataBag = new RequestDataBag([
                 LoginAsCustomerRoute::TOKEN => $token,
                 LoginAsCustomerRoute::SALES_CHANNEL_ID => $salesChannelId,
                 LoginAsCustomerRoute::CUSTOMER_ID => $customerId,
+                LoginAsCustomerRoute::USER_ID => $userId,
             ]);
 
             $contextToken = $this->loginAsCustomerRoute->loginAsCustomer($dataBag, $context)->getToken();
 
             $newContext = $this->salesChannelContextService->get(
                 new SalesChannelContextServiceParameters(
-                    $context->getSalesChannelId(),
+                    $salesChannelId,
                     $contextToken,
                     $context->getLanguageIdChain()[0],
                     $context->getCurrencyId(),

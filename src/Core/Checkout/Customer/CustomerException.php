@@ -58,11 +58,7 @@ class CustomerException extends HttpException
     public const CUSTOMER_OPTIN_NOT_COMPLETED = 'CHECKOUT__CUSTOMER_OPTIN_NOT_COMPLETED';
     public const CUSTOMER_CHANGE_PAYMENT_ERROR = 'CHECKOUT__CUSTOMER_CHANGE_PAYMENT_METHOD_NOT_FOUND';
     public const CUSTOMER_GUEST_AUTH_INVALID = 'CHECKOUT__CUSTOMER_AUTH_INVALID';
-
     public const LOGIN_AS_CUSTOMER_INVALID_TOKEN_CODE = 'CHECKOUT__LOGIN_AS_CUSTOMER_INVALID_TOKEN';
-    public const LOGIN_AS_CUSTOMER_MISSING_CUSTOMER_ID_CODE = 'CHECKOUT__LOGIN_AS_CUSTOMER_MISSING_CUSTOMER_ID';
-    public const LOGIN_AS_CUSTOMER_MISSING_SALES_CHANNEL_ID_CODE = 'CHECKOUT__LOGIN_AS_CUSTOMER_MISSING_SALES_CHANNEL_ID';
-    public const LOGIN_AS_CUSTOMER_MISSING_TOKEN_CODE = 'CHECKOUT__LOGIN_AS_CUSTOMER_MISSING_TOKEN';
 
     public static function customerGroupNotFound(string $id): self
     {
@@ -82,38 +78,6 @@ class CustomerException extends HttpException
             'The token "{{ token }}" is invalid.',
             ['token' => $token]
         );
-    }
-
-    public static function missingCustomerId(): self
-    {
-        return new self(
-            Response::HTTP_BAD_REQUEST,
-            self::LOGIN_AS_CUSTOMER_MISSING_CUSTOMER_ID_CODE,
-            'customerId is missing.',
-        );
-    }
-
-    public static function missingSalesChannelId(): self
-    {
-        return new self(
-            Response::HTTP_BAD_REQUEST,
-            self::LOGIN_AS_CUSTOMER_MISSING_SALES_CHANNEL_ID_CODE,
-            'salesChannelId is missing.',
-        );
-    }
-
-    public static function missingToken(): self
-    {
-        return new self(
-            Response::HTTP_BAD_REQUEST,
-            self::LOGIN_AS_CUSTOMER_MISSING_TOKEN_CODE,
-            'token is missing.',
-        );
-    }
-
-    public static function customerNotFoundById(string $customerId): CustomerNotFoundByIdException
-    {
-        return new CustomerNotFoundByIdException($customerId);
     }
 
     public static function groupRequestNotFound(string $id): self

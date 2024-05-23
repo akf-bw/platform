@@ -4,18 +4,16 @@ namespace Shopware\Tests\Unit\Core\Checkout\Customer\SalesChannel;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Shopware\Core\Checkout\Customer\CustomerCollection;
-use Shopware\Core\Checkout\Customer\CustomerDefinition;
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Checkout\Customer\LoginAsCustomerTokenGenerator;
-use Shopware\Core\Framework\Log\Package;
+use Shopware\Core\Checkout\Customer\SalesChannel\AccountService;
 use Shopware\Core\Checkout\Customer\SalesChannel\LoginAsCustomerRoute;
-use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Shopware\Core\Framework\Log\Package;
+use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
-use Shopware\Core\System\SalesChannel\Context\CartRestorer;
+use Shopware\Core\Framework\Validation\DataValidator;
 use Shopware\Core\System\SalesChannel\ContextTokenResponse;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
-use Shopware\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Shopware\Core\Test\TestDefaults;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -28,36 +26,40 @@ class LoginAsCustomerRouteTest extends TestCase
 {
     public function testLoginAsCustomer(): void
     {
+        $customerId = Uuid::randomHex();
+        $userId = Uuid::randomHex();
+
         $customerEntity = new CustomerEntity();
         $customerEntity->setDoubleOptInRegistration(false);
-        $customerEntity->setId('customer-1');
+        $customerEntity->setId($customerId);
         $customerEntity->setEmail('customer@example.com');
         $customerEntity->setGuest(false);
 
-        $customerRepository = new StaticEntityRepository(
-            [new CustomerCollection([$customerEntity])],
-            new CustomerDefinition()
-        );
-
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
 
+        $loginAsCustomerTokenGenerator = $this->createMock(LoginAsCustomerTokenGenerator::class);
+
         $route = new LoginAsCustomerRoute(
+            $this->createMock(AccountService::class),
+            $loginAsCustomerTokenGenerator,
             $dispatcher,
-            $customerRepository,
-            $this->createMock(CartRestorer::class),
-            $this->createMock(LoginAsCustomerTokenGenerator::class)
+            $this->createMock(DataValidator::class),
         );
 
         $salesChannelContext = $this->createMock(SalesChannelContext::class);
         $salesChannelContext->method('getSalesChannelId')->willReturn(TestDefaults::SALES_CHANNEL);
 
+        $loginAsCustomerTokenGenerator->method('validate')->willReturn(true);
+
         $dataBag = new RequestDataBag([
-            LoginAsCustomerRoute::CUSTOMER_ID => 'customer-1',
             LoginAsCustomerRoute::TOKEN => 'token-1',
+            LoginAsCustomerRoute::SALES_CHANNEL_ID => TestDefaults::SALES_CHANNEL,
+            LoginAsCustomerRoute::CUSTOMER_ID => $customerId,
+            LoginAsCustomerRoute::USER_ID => $userId,
         ]);
 
         $response = $route->loginAsCustomer($dataBag, $salesChannelContext);
 
-        self::assertInstanceOf(ContextTokenResponse::class, $response);
+        static::assertInstanceOf(ContextTokenResponse::class, $response);
     }
 }

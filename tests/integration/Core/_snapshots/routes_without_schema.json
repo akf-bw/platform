@@ -123,6 +123,7 @@
     "/_proxy/modify-shipping-costs",
     "/_proxy/store-api/{salesChannelId}/{_path}",
     "/_proxy/switch-customer",
+    "/_proxy/login-as-customer-token-generate",
     "/acl-role",
     "/acl-role/{roleId}",
     "/acl-role/{roleId}",

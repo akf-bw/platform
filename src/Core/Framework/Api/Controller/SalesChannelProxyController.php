@@ -13,6 +13,9 @@ use Shopware\Core\Checkout\Customer\LoginAsCustomerTokenGenerator;
 use Shopware\Core\Checkout\Promotion\Cart\PromotionCollector;
 use Shopware\Core\Content\Product\Cart\ProductCartProcessor;
 use Shopware\Core\Framework\Api\ApiException;
+use Shopware\Core\Framework\Api\Context\AdminApiSource;
+use Shopware\Core\Framework\Api\Context\Exception\InvalidContextSourceException;
+use Shopware\Core\Framework\Api\Controller\Exception\ExpectedUserHttpException;
 use Shopware\Core\Framework\Api\Exception\InvalidSalesChannelIdException;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -149,19 +152,28 @@ class SalesChannelProxyController extends AbstractController
             throw ApiException::customerIdParameterIsMissing();
         }
 
-        $salesChannelId = (string) $request->request->get(self::SALES_CHANNEL_ID);
-        $salesChannel = $this->fetchSalesChannel($salesChannelId, $context);
-        $customerId = (string) $request->request->get('customerId');
-
+        $customerId = $request->request->getString('customerId');
         if (!$this->doesCustomerExist($customerId, $context)) {
             throw ApiException::resourceNotFound('customer', ['id' => $customerId]);
         }
 
+        $salesChannelId = $request->request->getString(self::SALES_CHANNEL_ID);
+        $salesChannel = $this->fetchSalesChannel($salesChannelId, $context);
         if ($salesChannel->getDomains() === null || $salesChannel->getDomains()->first() === null) {
             throw ApiException::invalidSalesChannelId($salesChannelId);
         }
 
-        $token = $this->loginAsCustomerTokenGenerator->generate($salesChannelId, $customerId);
+        $source = $context->getSource();
+        if (!$source instanceof AdminApiSource) {
+            throw new InvalidContextSourceException(AdminApiSource::class, $source::class);
+        }
+
+        $userId = $source->getUserId();
+        if (!$userId) {
+            throw new ExpectedUserHttpException();
+        }
+
+        $token = $this->loginAsCustomerTokenGenerator->generate($salesChannelId, $customerId, $userId);
 
         $redirectUrlWithToken = sprintf(
             '%s/%s',
@@ -170,6 +182,7 @@ class SalesChannelProxyController extends AbstractController
                 'token' => $token,
                 'salesChannelId' => $salesChannelId,
                 'customerId' => $customerId,
+                'userId' => $userId,
             ])
         );
 

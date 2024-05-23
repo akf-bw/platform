@@ -21,7 +21,7 @@ class LoginRoute extends AbstractLoginRoute
      * @internal
      */
     public function __construct(
-        private readonly AccountService $accountService,
+        private readonly AbstractAccountService $accountService,
         private readonly RequestStack $requestStack,
         private readonly RateLimiter $rateLimiter
     ) {

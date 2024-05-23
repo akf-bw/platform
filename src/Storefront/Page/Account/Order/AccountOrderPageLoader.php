@@ -4,7 +4,7 @@ namespace Shopware\Storefront\Page\Account\Order;
 
 use Shopware\Core\Checkout\Cart\CartException;
 use Shopware\Core\Checkout\Cart\Exception\CustomerNotLoggedInException;
-use Shopware\Core\Checkout\Customer\SalesChannel\AccountService;
+use Shopware\Core\Checkout\Customer\SalesChannel\AbstractAccountService;
 use Shopware\Core\Checkout\Order\Exception\GuestNotAuthenticatedException;
 use Shopware\Core\Checkout\Order\Exception\WrongGuestCredentialsException;
 use Shopware\Core\Checkout\Order\OrderCollection;
@@ -39,7 +39,7 @@ class AccountOrderPageLoader
         private readonly GenericPageLoaderInterface $genericLoader,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly AbstractOrderRoute $orderRoute,
-        private readonly AccountService $accountService,
+        private readonly AbstractAccountService $accountService,
         private readonly ?AbstractTranslator $translator = null
     ) {
     }

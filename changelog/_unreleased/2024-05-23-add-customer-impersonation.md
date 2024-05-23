@@ -1,20 +1,25 @@
 ---
-title: Add login as a customer to the administration
+title: Add customer impersonation
 issue: NEXT-8593
-author: Ugurkan Kaya, Jan-Erik Spreng
-author_github: ugurkankya, sobyte
+author: Ugurkan Kaya, Jan-Erik Spreng, Benjamin Wittwer
+author_email: j.spreng@seidemann-web.com, benjamin.wittwer@a-k-f.de
+author_github: ugurkankya, sobyte, akf-bw
 ---
 # Core
-* Added `Core/Checkout/Customer/CustomerException.php` for base exception factory class
-* Added `Core/Checkout/Customer/Exception/InvalidLoginAsCustomerTokenException.php`
-* Added `Core/Checkout/Customer/LoginAsCustomerTokenGenerator.php` for generating secure token for the storefront to identify the customer
-* Added `Core/Checkout/Customer/SalesChannel/AbstractLoginAsCustomerRoute.php`
-* Added `Core/Checkout/Customer/SalesChannel/LoginAsCustomerRoute.php`
-* Added `/api/_proxy/login-as-customer-token-generate` to `Core/Framework/Api/Controller/SalesChannelProxyController.php`
-* Added `Core/Framework/Api/Exception/InvalidCustomerIdException.php`
+* Added `Core/Checkout/Customer/CustomerException::invalidToken` exception
+* Added `Core/Checkout/Customer/Exception/InvalidLoginAsCustomerTokenException`
+* Added `Core/Checkout/Customer/LoginAsCustomerTokenGenerator` for generating secure token for the storefront to identify the customer
+* Added `Core/Checkout/Customer/SalesChannel/AbstractLoginAsCustomerRoute`
+* Added `Core/Checkout/Customer/SalesChannel/LoginAsCustomerRoute`
+* Added `/api/_proxy/login-as-customer-token-generate` to `Core/Framework/Api/Controller/SalesChannelProxyController`
+* Added `Core/Checkout/Customer/SalesChannel/AbstractAccountService`
+* Changed `Core/Checkout/Customer/Event/CustomerBeforeLoginEvent` to add optional `userId`
+* Changed `Core/Checkout/Customer/Event/CustomerLoginEvent` to add optional `userId`
+* Changed `Core/Checkout/Customer/SalesChannel/AccountService` to add optional `userId` & `forcedSalesChannelId` to `loginById`
+* Changed `Core/Framework/Api/ApiDefinition/Generator/Schema/StoreApi/paths/account.json` to include the `account/login/customer` route
 ___
 # Storefront
-* Added `/account/login/customer/{token}/{salesChannelId}/{customerId}` to `Storefront/Controller/AuthController.php` for allowing to log in as customer
+* Added `/account/login/customer/{token}/{salesChannelId}/{customerId}/{userId}` to `Storefront/Controller/AuthController` for allowing to log in as customer
 ___
 # Store API
 * Added `/store-api/account/login/customer` for allowing to log in as customer and returning new token
