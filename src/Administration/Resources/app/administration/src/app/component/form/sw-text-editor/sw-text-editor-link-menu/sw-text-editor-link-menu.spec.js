@@ -57,10 +57,12 @@ async function createWrapper(buttonConfig) {
     return mount(await wrapTestComponent('sw-text-editor-link-menu', { sync: true }), {
         global: {
             stubs: {
-                'sw-select-field': await wrapTestComponent('sw-select-field'),
+                'sw-select-field': await wrapTestComponent('sw-select-field', { sync: true }),
+                'sw-select-field-deprecated': await wrapTestComponent('sw-select-field-deprecated', { sync: true }),
                 'sw-switch-field': await wrapTestComponent('sw-switch-field'),
                 'sw-switch-field-deprecated': await wrapTestComponent('sw-switch-field-deprecated', { sync: true }),
                 'sw-email-field': await wrapTestComponent('sw-email-field'),
+                'sw-email-field-deprecated': await wrapTestComponent('sw-email-field-deprecated'),
                 'sw-text-field': await wrapTestComponent('sw-text-field'),
                 'sw-text-field-deprecated': await wrapTestComponent('sw-text-field-deprecated', { sync: true }),
                 'sw-url-field': await wrapTestComponent('sw-url-field'),

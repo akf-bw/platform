@@ -41,61 +41,6 @@ parameters:
 			path: src/Administration/Service/AdminSearcher.php
 
 		-
-			message: "#^Method Shopware\\\\Administration\\\\Test\\\\Migration\\\\Migration1636121186CopySalesChannelIdsIntoUserConfigTest\\:\\:fetchConfigs\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Administration/Test/Migration/Migration1636121186CopySalesChannelIdsIntoUserConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Administration\\\\Test\\\\Migration\\\\Migration1636121186CopySalesChannelIdsIntoUserConfigTest\\:\\:fetchExpectedSalesChannelIds\\(\\) has parameter \\$languages with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Administration/Test/Migration/Migration1636121186CopySalesChannelIdsIntoUserConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Administration\\\\Test\\\\Migration\\\\Migration1636121186CopySalesChannelIdsIntoUserConfigTest\\:\\:fetchExpectedSalesChannelIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Administration/Test/Migration/Migration1636121186CopySalesChannelIdsIntoUserConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Administration\\\\Test\\\\Migration\\\\Migration1636121186CopySalesChannelIdsIntoUserConfigTest\\:\\:fetchLanguages\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Administration/Test/Migration/Migration1636121186CopySalesChannelIdsIntoUserConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Administration\\\\Test\\\\Migration\\\\Migration1636121186CopySalesChannelIdsIntoUserConfigTest\\:\\:fetchSalesChannelNames\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Administration/Test/Migration/Migration1636121186CopySalesChannelIdsIntoUserConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Administration\\\\Test\\\\Migration\\\\Migration1636121186CopySalesChannelIdsIntoUserConfigTest\\:\\:getSalesChannelFixture\\(\\) has parameter \\$merge with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Administration/Test/Migration/Migration1636121186CopySalesChannelIdsIntoUserConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Administration\\\\Test\\\\Migration\\\\Migration1636121186CopySalesChannelIdsIntoUserConfigTest\\:\\:getSalesChannelFixture\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Administration/Test/Migration/Migration1636121186CopySalesChannelIdsIntoUserConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Administration\\\\Test\\\\Migration\\\\Migration1636121186CopySalesChannelIdsIntoUserConfigTest\\:\\:getUserFixture\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Administration/Test/Migration/Migration1636121186CopySalesChannelIdsIntoUserConfigTest.php
-
-		-
-			message: "#^Property Shopware\\\\Administration\\\\Test\\\\Migration\\\\Migration1636121186CopySalesChannelIdsIntoUserConfigTest\\:\\:\\$languages type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Administration/Test/Migration/Migration1636121186CopySalesChannelIdsIntoUserConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Administration\\\\Test\\\\Notification\\\\Repository\\\\NotificationRepositoryTest\\:\\:notificationProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Administration/Test/Notification/Repository/NotificationRepositoryTest.php
-
-		-
-			message: "#^Cannot call method getValue\\(\\) on Shopware\\\\Core\\\\Framework\\\\DataAbstractionLayer\\\\Entity\\|null\\.$#"
-			count: 2
-			path: src/Administration/Test/System/SalesChannel/Subscriber/SalesChannelUserConfigSubscriberTest.php
-
-		-
 			message: "#^Cannot call method getDeliveryDate\\(\\) on Shopware\\\\Core\\\\Checkout\\\\Cart\\\\Delivery\\\\Struct\\\\DeliveryPosition\\|null\\.$#"
 			count: 1
 			path: src/Core/Checkout/Cart/Delivery/DeliveryBuilder.php
@@ -1174,16 +1119,6 @@ parameters:
 			message: "#^Method Shopware\\\\Core\\\\Content\\\\MailTemplate\\\\Exception\\\\MailTransportFailedException\\:\\:__construct\\(\\) has parameter \\$failedRecipients with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Core/Content/MailTemplate/Exception/MailTransportFailedException.php
-
-		-
-			message: "#^Method Shopware\\\\Core\\\\Content\\\\MailTemplate\\\\Subscriber\\\\MailSendSubscriberConfig\\:\\:getDocumentIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Core/Content/MailTemplate/Subscriber/MailSendSubscriberConfig.php
-
-		-
-			message: "#^Method Shopware\\\\Core\\\\Content\\\\MailTemplate\\\\Subscriber\\\\MailSendSubscriberConfig\\:\\:getMediaIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Core/Content/MailTemplate/Subscriber/MailSendSubscriberConfig.php
 
 		-
 			message: "#^Method Shopware\\\\Core\\\\Content\\\\Media\\\\Aggregate\\\\MediaThumbnailSize\\\\MediaThumbnailSizeEntity\\:\\:getMediaFolderConfigurations\\(\\) should return Shopware\\\\Core\\\\Content\\\\Media\\\\Aggregate\\\\MediaFolderConfiguration\\\\MediaFolderConfigurationCollection but returns Shopware\\\\Core\\\\Content\\\\Media\\\\Aggregate\\\\MediaFolderConfiguration\\\\MediaFolderConfigurationCollection\\|null\\.$#"
@@ -2934,16 +2869,6 @@ parameters:
 			message: "#^Property Shopware\\\\Core\\\\Framework\\\\Api\\\\Acl\\\\Role\\\\AclRoleEntity\\:\\:\\$privileges type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Core/Framework/Api/Acl/Role/AclRoleEntity.php
-
-		-
-			message: "#^Method Shopware\\\\Core\\\\Framework\\\\Api\\\\ApiDefinition\\\\Generator\\\\OpenApi\\\\OpenApiSchemaBuilder\\:\\:createSecurity\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Core/Framework/Api/ApiDefinition/Generator/OpenApi/OpenApiSchemaBuilder.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$security has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Core/Framework/Api/ApiDefinition/Generator/OpenApi/OpenApiSchemaBuilder.php
 
 		-
 			message: "#^Cannot cast PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Name to string\\.$#"
@@ -5407,16 +5332,6 @@ parameters:
 			path: src/Core/Maintenance/SalesChannel/Service/SalesChannelCreator.php
 
 		-
-			message: "#^Cannot call method getFactor\\(\\) on Shopware\\\\Core\\\\Framework\\\\DataAbstractionLayer\\\\Entity\\|null\\.$#"
-			count: 1
-			path: src/Core/Maintenance/Test/System/Service/ShopConfiguratorTest.php
-
-		-
-			message: "#^Cannot call method getName\\(\\) on Shopware\\\\Core\\\\Framework\\\\DataAbstractionLayer\\\\Entity\\|null\\.$#"
-			count: 4
-			path: src/Core/Maintenance/Test/System/Service/ShopConfiguratorTest.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Core\\\\Framework\\\\DataAbstractionLayer\\\\Entity\\:\\:getLogoId\\(\\)\\.$#"
 			count: 1
 			path: src/Core/Migration/Test/Migration1605609477RemoveDeleteCascadeConstraintInDocumentBaseConfigTableTest.php
@@ -6040,76 +5955,6 @@ parameters:
 			message: "#^Offset 'zipCode' might not exist on array\\|null\\.$#"
 			count: 1
 			path: src/Core/System/Tax/TaxRuleType/ZipCodeRuleTypeFilter.php
-
-		-
-			message: "#^Property Shopware\\\\Core\\\\System\\\\Test\\\\Country\\\\Repository\\\\CountryRepositoryTest\\:\\:\\$connection is never read, only written\\.$#"
-			count: 1
-			path: src/Core/System/Test/Country/Repository/CountryRepositoryTest.php
-
-		-
-			message: "#^Property Shopware\\\\Core\\\\System\\\\Test\\\\Country\\\\Repository\\\\CountryStateRepositoryTest\\:\\:\\$connection is never read, only written\\.$#"
-			count: 1
-			path: src/Core/System/Test/Country/Repository/CountryStateRepositoryTest.php
-
-		-
-			message: "#^Cannot call method getWriteResults\\(\\) on Shopware\\\\Core\\\\Framework\\\\DataAbstractionLayer\\\\Event\\\\EntityWrittenEvent\\|null\\.$#"
-			count: 1
-			path: src/Core/System/Test/Currency/Repository/CurrencyRepositoryTest.php
-
-		-
-			message: "#^Property Shopware\\\\Core\\\\System\\\\Test\\\\Currency\\\\Repository\\\\CurrencyRepositoryTest\\:\\:\\$connection is never read, only written\\.$#"
-			count: 1
-			path: src/Core/System/Test/Currency/Repository/CurrencyRepositoryTest.php
-
-		-
-			message: "#^Cannot call method getAdmin\\(\\) on Shopware\\\\Core\\\\Framework\\\\DataAbstractionLayer\\\\Entity\\|null\\.$#"
-			count: 2
-			path: src/Core/System/Test/Integration/IntegrationRepositoryTest.php
-
-		-
-			message: "#^Cannot call method getLabel\\(\\) on Shopware\\\\Core\\\\Framework\\\\DataAbstractionLayer\\\\Entity\\|null\\.$#"
-			count: 3
-			path: src/Core/System/Test/Integration/IntegrationRepositoryTest.php
-
-		-
-			message: "#^Cannot call method getNumberRangeSalesChannels\\(\\) on Shopware\\\\Core\\\\Framework\\\\DataAbstractionLayer\\\\Entity\\|null\\.$#"
-			count: 2
-			path: src/Core/System/Test/NumberRange/Aggregate/NumberRangeSalesChannel/NumberRangeSalesChannelDefinitionTest.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Core\\\\Framework\\\\DataAbstractionLayer\\\\Entity\\|null\\.$#"
-			count: 2
-			path: src/Core/System/Test/NumberRange/NumberRangeValueGeneratorTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertCount\\(\\) expects Countable\\|iterable, Shopware\\\\Core\\\\Content\\\\Category\\\\CategoryCollection\\|null given\\.$#"
-			count: 1
-			path: src/Core/System/Test/SalesChannel/Entity/SalesChannelDefinitionTest.php
-
-		-
-			message: "#^Property Shopware\\\\Core\\\\System\\\\Test\\\\SalesChannel\\\\Repository\\\\SalesChannelRepositoryTest\\:\\:\\$connection is never read, only written\\.$#"
-			count: 1
-			path: src/Core/System/Test/SalesChannel/Repository/SalesChannelRepositoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Core\\\\System\\\\Test\\\\SalesChannel\\\\Subscriber\\\\SalesChannelTypeValidatorTest\\:\\:listAvailable\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Core/System/Test/SalesChannel/Subscriber/SalesChannelTypeValidatorTest.php
-
-		-
-			message: "#^Class Shopware\\\\Core\\\\System\\\\Salutation\\\\SalesChannel\\\\CachedSalutationRoute constructor invoked with 7 parameters, 6 required\\.$#"
-			count: 1
-			path: src/Core/System/Test/Salutation/CachedSalutationRouteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Core\\\\System\\\\Test\\\\Salutation\\\\CachedSalutationRouteTest\\:\\:invalidationProvider\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Core/System/Test/Salutation/CachedSalutationRouteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Core\\\\System\\\\Test\\\\Tag\\\\Service\\\\FilterTagIdsServiceTest\\:\\:getCategoryPayload\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Core/System/Test/Tag/Service/FilterTagIdsServiceTest.php
 
 		-
 			message: "#^Method Shopware\\\\Core\\\\System\\\\Unit\\\\Aggregate\\\\UnitTranslation\\\\UnitTranslationCollection\\:\\:getLanguageIds\\(\\) return type has no value type specified in iterable type array\\.$#"

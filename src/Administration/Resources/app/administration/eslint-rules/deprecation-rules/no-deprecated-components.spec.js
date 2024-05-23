@@ -22,6 +22,14 @@ tester.run('no-deprecated-components', rule, {
             </template>`
         },
         {
+            name: '"mt-colorpicker" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-colorpicker>Hello</mt-colorpicker>
+            </template>`
+        },
+        {
             name: '"mt-icon" usage is allowed',
             filename: 'test.html.twig',
             code: `
@@ -51,6 +59,70 @@ tester.run('no-deprecated-components', rule, {
             code: `
             <template>
                 <mt-tabs />
+            </template>`
+        },
+        {
+            name: '"mt-checkbox" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-checkbox />
+            </template>`
+        },
+        {
+            name: '"mt-textarea" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-textarea />
+            </template>`
+        },
+        {
+            name: '"mt-banner" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-banner />
+            </template>`
+        },
+        {
+            name: '"mt-email-field" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-email-field />
+            </template>`
+        },
+        {
+            name: '"mt-select" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-select />
+            </template>`
+        },
+        {
+            name: '"mt-skeleton-bar" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-skeleton-bar />
+            </template>`
+        },
+        {
+            name: '"mt-switch" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-switch />
+            </template>`
+        },
+        {
+            name: '"mt-number-field" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-number-field />
             </template>`
         }
     ],
@@ -165,6 +237,34 @@ tester.run('no-deprecated-components', rule, {
 </template>`,
             errors: [{
                 message: '"sw-text-field" is deprecated. Please use "mt-text-field" instead.',
+            }]
+        },
+        {
+            name: '"sw-colorpicker" usage is not allowed',
+            filename: 'test.html.twig',
+            code: `
+<template>
+    <sw-colorpicker />
+</template>`,
+            output: `
+<template>
+    <!-- TODO Codemod: Converted from sw-colorpicker - please check if everything works correctly -->
+    <mt-colorpicker />
+</template>`,
+            errors: [{
+                message: '"sw-colorpicker" is deprecated. Please use "mt-colorpicker" instead.',
+            }]
+        },
+        {
+            name: '"sw-colorpicker" usage is not allowed [disableFix]',
+            filename: 'test.html.twig',
+            options: ['disableFix'],
+            code: `
+<template>
+    <sw-colorpicker />
+</template>`,
+            errors: [{
+                message: '"sw-colorpicker" is deprecated. Please use "mt-colorpicker" instead.',
             }]
         },
         {
@@ -307,5 +407,145 @@ tester.run('no-deprecated-components', rule, {
                 message: '"sw-tabs" is deprecated. Please use "mt-tabs" instead.',
             }]
         },
+        {
+            name: '"sw-select-field" usage is not allowed',
+            filename: 'test.html.twig',
+            code: `
+<template>
+    <sw-select-field />
+</template>`,
+            output: `
+<template>
+    <!-- TODO Codemod: Converted from sw-select-field - please check if everything works correctly -->
+    <mt-select />
+</template>`,
+            errors: [{
+                message: '"sw-select-field" is deprecated. Please use "mt-select" instead.',
+            }]
+        },
+        {
+            name: '"sw-select-field" usage is not allowed [disableFix]',
+            filename: 'test.html.twig',
+            options: ['disableFix'],
+            code: `
+<template>
+    <sw-select-field />
+</template>`,
+            errors: [{
+                message: '"sw-select-field" is deprecated. Please use "mt-select" instead.',
+            }]
+        },
+        {
+            name: '"sw-textarea-field" usage is not allowed',
+            filename: 'test.html.twig',
+            code: `
+<template>
+    <sw-textarea-field />
+</template>`,
+            output: `
+<template>
+    <!-- TODO Codemod: Converted from sw-textarea-field - please check if everything works correctly -->
+    <mt-textarea />
+</template>`,
+            errors: [{
+                message: '"sw-textarea-field" is deprecated. Please use "mt-textarea" instead.',
+            }]
+        },
+        {
+            name: '"sw-textarea-field" usage is not allowed [disableFix]',
+            filename: 'test.html.twig',
+            options: ['disableFix'],
+            code: `
+<template>
+    <sw-textarea-field />
+</template>`,
+            errors: [{
+                message: '"sw-textarea-field" is deprecated. Please use "mt-textarea" instead.',
+            }]
+        },
+        {
+            name: '"sw-alert" usage is not allowed',
+            filename: 'test.html.twig',
+            code: `
+<template>
+    <sw-alert>Hello</sw-alert>
+</template>`,
+            output: `
+<template>
+    <!-- TODO Codemod: Converted from sw-alert - please check if everything works correctly -->
+    <mt-banner>Hello</mt-banner>
+</template>`,
+            errors: [{
+                message: '"sw-alert" is deprecated. Please use "mt-banner" instead.',
+            }]
+        },
+        {
+            name: '"sw-alert" usage is not allowed [disableFix]',
+            filename: 'test.html.twig',
+            options: ['disableFix'],
+            code: `
+<template>
+    <sw-alert>Hello</sw-alert>
+</template>`,
+            errors: [{
+                message: '"sw-alert" is deprecated. Please use "mt-banner" instead.',
+            }]
+        },
+        {
+            name: '"sw-email-field" usage is not allowed',
+            filename: 'test.html.twig',
+            code: `
+<template>
+    <sw-email-field />
+</template>`,
+            output: `
+<template>
+    <!-- TODO Codemod: Converted from sw-email-field - please check if everything works correctly -->
+    <mt-email-field />
+</template>`,
+            errors: [{
+                message: '"sw-email-field" is deprecated. Please use "mt-email-field" instead.',
+            }]
+        },
+        {
+            name: '"sw-email-field" usage is not allowed [disableFix]',
+            filename: 'test.html.twig',
+            options: ['disableFix'],
+            code: `
+<template>
+    <sw-email-field />
+</template>`,
+            errors: [{
+                message: '"sw-email-field" is deprecated. Please use "mt-email-field" instead.',
+            }]
+        },
+        {
+            name: '"sw-skeleton-bar" usage is not allowed',
+            filename: 'test.html.twig',
+            code: `
+<template>
+    <sw-skeleton-bar />
+</template>`,
+            output: `
+<template>
+    <!-- TODO Codemod: Converted from sw-skeleton-bar - please check if everything works correctly -->
+    <mt-skeleton-bar />
+</template>`,
+            errors: [{
+                message: '"sw-skeleton-bar" is deprecated. Please use "mt-skeleton-bar" instead.',
+            }]
+        },
+        {
+            name: '"sw-skeleton-bar" usage is not allowed [disableFix]',
+            filename: 'test.html.twig',
+            options: ['disableFix'],
+            code: `
+<template>
+    <sw-skeleton-bar />
+</template>`,
+            errors: [{
+                message: '"sw-skeleton-bar" is deprecated. Please use "mt-skeleton-bar" instead.',
+            }]
+        }
     ]
 })

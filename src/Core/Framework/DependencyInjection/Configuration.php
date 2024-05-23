@@ -2,6 +2,7 @@
 
 namespace Shopware\Core\Framework\DependencyInjection;
 
+use Shopware\Core\Content\Media\File\DownloadResponseGenerator;
 use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Util\MemorySizeCalculator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -114,7 +115,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->enumNode('private_local_download_strategy')
                     ->defaultValue('php')
-                    ->values(['php', 'x-sendfile', 'x-accel'])
+                    ->values(['php', DownloadResponseGenerator::X_SENDFILE_DOWNLOAD_STRATEGY, DownloadResponseGenerator::X_ACCEL_DOWNLOAD_STRATEGY])
                 ->end()
             ->end();
 
@@ -690,6 +691,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
             ->booleanNode('update_mail_variables_on_send')->defaultTrue()->end()
+            ->integerNode('max_body_length')->defaultValue(0)->end()
             ->end();
 
         return $rootNode;

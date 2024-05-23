@@ -359,7 +359,10 @@ class InfoControllerTest extends TestCase
             ->method('getBundles')
             ->willReturn([new BundleFixture('SomeFunctionalityBundle', __DIR__ . '/Fixtures/InfoController')]);
 
-        $content = $infoController->config(Context::createDefaultContext(), Request::create('http://localhost'))->getContent();
+        $appUrl = EnvironmentHelper::getVariable('APP_URL');
+        static::assertIsString($appUrl);
+
+        $content = $infoController->config(Context::createDefaultContext(), Request::create($appUrl))->getContent();
         static::assertNotFalse($content);
         $config = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
         static::assertArrayHasKey('SomeFunctionalityBundle', $config['bundles']);
@@ -418,7 +421,10 @@ class InfoControllerTest extends TestCase
             ->method('getBundles')
             ->willReturn([new BundleFixture('SomeFunctionalityBundle', __DIR__ . '/Fixtures/InfoControllerWithMarker')]);
 
-        $content = $infoController->config(Context::createDefaultContext(), Request::create('http://localhost'))->getContent();
+        $appUrl = EnvironmentHelper::getVariable('APP_URL');
+        static::assertIsString($appUrl);
+
+        $content = $infoController->config(Context::createDefaultContext(), Request::create($appUrl))->getContent();
         static::assertNotFalse($content);
         $config = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
         static::assertArrayHasKey('SomeFunctionalityBundle', $config['bundles']);
@@ -443,7 +449,10 @@ class InfoControllerTest extends TestCase
         $kernelMock = $this->createMock(Kernel::class);
         $eventCollector = $this->createMock(FlowActionCollector::class);
 
-        $basePath = new UrlPackage(['http://localhost'], new EmptyVersionStrategy());
+        $appUrl = EnvironmentHelper::getVariable('APP_URL');
+        static::assertIsString($appUrl);
+
+        $basePath = new UrlPackage([$appUrl], new EmptyVersionStrategy());
         $assets = new Packages($basePath, ['asset' => $basePath]);
 
         $infoController = new InfoController(
@@ -481,7 +490,7 @@ class InfoControllerTest extends TestCase
                 new AdminExtensionApiPluginWithLocalEntryPoint(true, __DIR__ . '/Fixtures/AdminExtensionApiPluginWithLocalEntryPoint'),
             ]);
 
-        $content = $infoController->config(Context::createDefaultContext(), Request::create('http://localhost'))->getContent();
+        $content = $infoController->config(Context::createDefaultContext(), Request::create($appUrl))->getContent();
         static::assertNotFalse($content);
         $config = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
         static::assertCount(3, $config['bundles']);
@@ -492,7 +501,7 @@ class InfoControllerTest extends TestCase
 
         static::assertArrayHasKey('AdminExtensionApiPluginWithLocalEntryPoint', $config['bundles']);
         static::assertEquals(
-            'http://localhost:8000/admin/adminextensionapipluginwithlocalentrypoint/index.html',
+            $appUrl . '/admin/adminextensionapipluginwithlocalentrypoint/index.html',
             $config['bundles']['AdminExtensionApiPluginWithLocalEntryPoint']['baseUrl'],
         );
         static::assertEquals('plugin', $config['bundles']['AdminExtensionApiPluginWithLocalEntryPoint']['type']);

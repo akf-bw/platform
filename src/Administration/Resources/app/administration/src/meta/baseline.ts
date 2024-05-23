@@ -46,11 +46,11 @@ const missingTests = [
     'src/app/component/form/sw-boolean-radio-group/index.js',
     'src/app/component/form/sw-compact-colorpicker/index.js',
     'src/app/component/form/sw-confirm-field/index.js',
-    'src/app/component/form/sw-email-field/index.js',
+    'src/app/component/form/sw-email-field-deprecated/index.js',
     'src/app/component/form/sw-field-copyable/index.js',
     'src/app/component/form/sw-gtc-checkbox/index.js',
     'src/app/component/form/sw-maintain-currencies-modal/index.js',
-    'src/app/component/form/sw-select-field/index.js',
+    'src/app/component/form/sw-select-field-deprecated/index.js',
     'src/app/component/form/sw-select-number-field/index.js',
     'src/app/component/form/sw-select-option/index.js',
     'src/app/component/form/sw-tagged-field/index.js',
@@ -58,7 +58,7 @@ const missingTests = [
     'src/app/component/form/sw-text-editor/sw-text-editor-toolbar/index.js',
     'src/app/component/form/sw-text-editor/sw-text-editor-toolbar-button/index.js',
     'src/app/component/form/sw-text-editor/sw-text-editor-toolbar-table-button/index.js',
-    'src/app/component/form/sw-textarea-field/index.js',
+    'src/app/component/form/sw-textarea-field-deprecated/index.js',
     'src/app/component/grid/sw-grid/index.js',
     'src/app/component/grid/sw-grid-column/index.js',
     'src/app/component/grid/sw-grid-row/index.js',
@@ -104,7 +104,7 @@ const missingTests = [
     'src/app/component/utils/sw-popover/index.js',
     'src/app/component/utils/sw-progress-bar/index.js',
     'src/app/component/utils/sw-skeleton/index.ts',
-    'src/app/component/utils/sw-skeleton-bar/index.ts',
+    'src/app/component/utils/sw-skeleton-bar-deprecated/index.ts',
     'src/app/component/utils/sw-step-display/index.js',
     'src/app/component/utils/sw-step-item/index.js',
     'src/app/component/utils/sw-text-preview/index.js',
@@ -666,6 +666,11 @@ const missingTests = [
     'src/module/sw-users-permissions/index.js',
     'src/app/component/form/select/entity/sw-entity-many-to-many-select/index.js',
     'src/module/sw-sales-channel/component/sw-sales-channel-modal/index.js',
+    // Doubled vite files
+    'src/app/main.vite.ts',
+    'src/index.vite.ts',
+    'src/app/init-post/index.vite.ts',
+    'src/app/init-post/worker.init.vite.ts',
 ];
 
 /**

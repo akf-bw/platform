@@ -9,6 +9,13 @@ const { handleMtSwitch } = require("./no-deprecated-component-usage-checks/mt-sw
 const { handleMtNumberField } = require("./no-deprecated-component-usage-checks/mt-number-field.check");
 const { handleMtCheckbox } = require("./no-deprecated-component-usage-checks/mt-checkbox.check");
 const { handleMtTabs } = require("./no-deprecated-component-usage-checks/mt-tabs.check");
+const { handleMtSelect } = require("./no-deprecated-component-usage-checks/mt-select.check");
+const { handleMtTextarea } = require("./no-deprecated-component-usage-checks/mt-textarea.check");
+const { handleMtBanner } = require("./no-deprecated-component-usage-checks/mt-banner.check");
+const { handleMtExternalLink } = require("./no-deprecated-component-usage-checks/mt-external-link.check");
+const { handleMtDatepicker } = require("./no-deprecated-component-usage-checks/mt-datepicker.check");
+const { handleMtColorpicker } = require("./no-deprecated-component-usage-checks/mt-colorpicker.check");
+const { handleMtEmailField } = require("./no-deprecated-component-usage-checks/mt-email-field.check");
 
 /* eslint-disable max-len */
 
@@ -55,6 +62,20 @@ module.exports = {
                     handleMtCheckbox(context, node);
                     // Handle mt-tabs
                     handleMtTabs(context, node);
+                    // Handle mt-select
+                    handleMtSelect(context, node);
+                    // Handle mt-textarea
+                    handleMtTextarea(context, node);
+                    // Handle mt-banner
+                    handleMtBanner(context, node);
+                    // Handle mt-external-link
+                    handleMtExternalLink(context, node);
+                    // Handle mt-datepicker
+                    handleMtDatepicker(context, node);
+                    // Handle mt-colorpicker
+                    handleMtColorpicker(context, node);
+                    // Handle mt-email-field component
+                    handleMtEmailField(context, node);
                 },
             }
         )
