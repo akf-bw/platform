@@ -96,13 +96,13 @@ class AccountService extends AbstractAccountService
      * @throws BadCredentialsException
      * @throws CustomerNotFoundByIdException
      */
-    public function loginById(string $id, SalesChannelContext $context, ?string $forcedSalesChannelId = null, ?string $userId = null): string
+    public function loginById(string $id, SalesChannelContext $context, ?string $userId = null): string
     {
         if (!Uuid::isValid($id)) {
             throw CustomerException::badCredentials();
         }
 
-        $customer = $this->fetchCustomer(new Criteria([$id]), $context, $forcedSalesChannelId ?? $context->getSalesChannelId(), true);
+        $customer = $this->fetchCustomer(new Criteria([$id]), $context, true);
         if ($customer === null) {
             // @deprecated tag:v6.7.0 - remove this if block
             if (!Feature::isActive('v6.7.0.0')) {
@@ -203,7 +203,7 @@ class AccountService extends AbstractAccountService
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('email', $email));
 
-        $customer = $this->fetchCustomer($criteria, $context, $context->getSalesChannelId(), $includeGuest);
+        $customer = $this->fetchCustomer($criteria, $context, $includeGuest);
         if ($customer === null) {
             throw CustomerException::customerNotFound($email);
         }
@@ -218,12 +218,12 @@ class AccountService extends AbstractAccountService
      * should be done via PHP because it's a lot faster to filter a few entities on PHP side with the same email
      * address, than to filter a huge numbers of rows in the DB on a not indexed column.
      */
-    private function fetchCustomer(Criteria $criteria, SalesChannelContext $context, string $salesChannelId, bool $includeGuest = false): ?CustomerEntity
+    private function fetchCustomer(Criteria $criteria, SalesChannelContext $context, bool $includeGuest = false): ?CustomerEntity
     {
         $criteria->setTitle('account-service::fetchCustomer');
 
         $result = $this->customerRepository->search($criteria, $context->getContext());
-        $result = $result->filter(function (CustomerEntity $customer) use ($includeGuest, $salesChannelId): ?bool {
+        $result = $result->filter(function (CustomerEntity $customer) use ($includeGuest, $context): ?bool {
             // Skip not active users
             if (!$customer->getActive()) {
                 return null;
@@ -240,7 +240,7 @@ class AccountService extends AbstractAccountService
             }
 
             // It is bound, but not to the current one. Skip it
-            if ($customer->getBoundSalesChannelId() !== $salesChannelId) {
+            if ($customer->getBoundSalesChannelId() !== $context->getSalesChannelId()) {
                 return null;
             }
 

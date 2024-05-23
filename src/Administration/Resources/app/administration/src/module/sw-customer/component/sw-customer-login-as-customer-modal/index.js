@@ -73,7 +73,6 @@ export default {
                     this.buildSalesChannelUrl(
                         salesChannelDomainUrl,
                         handledResponse.token,
-                        salesChannelId,
                         this.customer.id,
                         this.currentUser?.id,
                     ),
@@ -98,8 +97,8 @@ export default {
             });
         },
 
-        buildSalesChannelUrl(salesChannelDomainUrl, token, salesChannelId, customerId, userId) {
-            return `${salesChannelDomainUrl}/account/login/customer/${token}/${salesChannelId}/${customerId}/${userId}`;
+        buildSalesChannelUrl(salesChannelDomainUrl, token, customerId, userId) {
+            return `${salesChannelDomainUrl}/account/login/customer/${token}/${customerId}/${userId}`;
         },
     },
 };

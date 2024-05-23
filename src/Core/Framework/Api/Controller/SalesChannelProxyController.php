@@ -180,7 +180,6 @@ class SalesChannelProxyController extends AbstractController
             $salesChannel->getDomains()->first()->getUrl(),
             $this->generateUrl('frontend.account.login.customer', [
                 'token' => $token,
-                'salesChannelId' => $salesChannelId,
                 'customerId' => $customerId,
                 'userId' => $userId,
             ])

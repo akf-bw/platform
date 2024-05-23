@@ -50,13 +50,12 @@ class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
         $this->validateRequestDataFields($requestDataBag, $context);
 
         $token = $requestDataBag->getString(self::TOKEN);
-        $salesChannelId = $requestDataBag->getString(self::SALES_CHANNEL_ID);
         $customerId = $requestDataBag->getString(self::CUSTOMER_ID);
         $userId = $requestDataBag->getString(self::USER_ID);
 
-        $this->tokenGenerator->validate($token, $salesChannelId, $customerId, $userId);
+        $this->tokenGenerator->validate($token, $context->getSalesChannelId(), $customerId, $userId);
 
-        $newToken = $this->accountService->loginById($customerId, $context, $salesChannelId, $userId);
+        $newToken = $this->accountService->loginById($customerId, $context, $userId);
 
         return new ContextTokenResponse($newToken);
     }
@@ -72,7 +71,6 @@ class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
 
         $definition
             ->add(self::TOKEN, new NotBlank())
-            ->add(self::SALES_CHANNEL_ID, new Uuid(), new EntityExists(['entity' => 'sales_channel', 'context' => $frameworkContext]))
             ->add(self::CUSTOMER_ID, new Uuid(), new EntityExists(['entity' => 'customer', 'context' => $frameworkContext]))
             ->add(self::USER_ID, new Uuid(), new EntityExists(['entity' => 'user', 'context' => $frameworkContext]));
 
