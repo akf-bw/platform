@@ -81,7 +81,12 @@
         {% block sw_customer_detail_actions_storefront_customer_login %}
         <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
         <sw-button
-            :disabled="isLoading"
+            v-tooltip="{
+                message: $tc('sw-privileges.tooltip.warning'),
+                disabled: acl.can('api_proxy_login-as-customer'),
+                showOnDisabledElements: true
+            }"
+            :disabled="isLoading || !acl.can('api_proxy_login-as-customer')"
             @click="onClickButtonShowLoginAsCustomerModal"
         >
             {{ $tc('sw-customer.detail.buttonLoginAsCustomer') }}

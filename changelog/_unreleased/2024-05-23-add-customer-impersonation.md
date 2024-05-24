@@ -33,9 +33,12 @@ ___
 * Added new method `onClickButtonShowLoginAsCustomerModal` in `module/sw-customer/page/sw-customer-detail/index.js`
 * Added new method `onClickButtonCloseLoginAsCustomerModal` in `module/sw-customer/page/sw-customer-detail/index.js`
 * Added new method `loginAsCustomerTokenGenerate` in `core/service/api/store-context.api.service.js`
-* Added new snippet key `loginAsCustomerModal` in `module/sw-customer/snippet/de-DE.json`
-* Added new snippet `buttonLoginAsCustomer` in `module/sw-customer/snippet/de-DE.json`
-* Added new snippet `notificationLoginAsCustomerErrorMessage` in `module/sw-customer/snippet/de-DE.json`
-* Added new snippet key `loginAsCustomerModal` in `module/sw-customer/snippet/en-GB.json`
-* Added new snippet `buttonLoginAsCustomer` in `module/sw-customer/snippet/en-GB.json`
-* Added new snippet `notificationLoginAsCustomerErrorMessage` in `module/sw-customer/snippet/en-GB.json`
+* Added `loginAsCustomerModal` in `module/sw-customer/snippet/de-DE.json`
+* Added `buttonLoginAsCustomer` in `module/sw-customer/snippet/de-DE.json`
+* Added `notificationLoginAsCustomerErrorMessage` in `module/sw-customer/snippet/de-DE.json`
+* Added `loginAsCustomerModal` in `module/sw-customer/snippet/en-GB.json`
+* Added `buttonLoginAsCustomer` in `module/sw-customer/snippet/en-GB.json`
+* Added `notificationLoginAsCustomerErrorMessage` in `module/sw-customer/snippet/en-GB.json`
+* Added `api_proxy_login-as-customer` permission
+* Added `sw-privileges.additional_permissions.routes.api_proxy_login-as-customer` in `src/module/sw-users-permissions/snippet/de-DE.json`
+* Added `sw-privileges.additional_permissions.routes.api_proxy_login-as-customer` in `src/module/sw-users-permissions/snippet/en-GB.json`

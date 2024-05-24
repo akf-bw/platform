@@ -141,7 +141,7 @@ class SalesChannelProxyController extends AbstractController
         return $response;
     }
 
-    #[Route(path: '/api/_proxy/login-as-customer-token-generate', name: 'api.proxy.login-as-customer-token-generate', methods: ['POST'], defaults: ['_acl' => ['api_proxy_switch-customer']])]
+    #[Route(path: '/api/_proxy/login-as-customer-token-generate', name: 'api.proxy.login-as-customer-token-generate', methods: ['POST'], defaults: ['_acl' => ['api_proxy_login-as-customer']])]
     public function loginAsCustomerTokenGenerate(Request $request, Context $context): Response
     {
         if (!$request->request->has(self::SALES_CHANNEL_ID)) {

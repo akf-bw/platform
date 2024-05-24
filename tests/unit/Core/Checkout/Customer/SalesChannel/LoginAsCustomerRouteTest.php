@@ -11,7 +11,6 @@ use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\Framework\Validation\DataValidator;
-use Shopware\Core\System\SalesChannel\ContextTokenResponse;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\Test\TestDefaults;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -36,24 +35,27 @@ class LoginAsCustomerRouteTest extends TestCase
             $userId
         );
 
+        $accountService = $this->createMock(AccountService::class);
+        $accountService->method('loginById')->willReturn('newToken');
+
         $route = new LoginAsCustomerRoute(
-            $this->createMock(AccountService::class),
+            $accountService,
             $loginAsCustomerTokenGenerator,
             $this->createMock(EventDispatcherInterface::class),
             $this->createMock(DataValidator::class),
         );
 
+        $salesChannelContext = $this->createMock(SalesChannelContext::class);
+        $salesChannelContext->method('getSalesChannelId')->willReturn(TestDefaults::SALES_CHANNEL);
+
         $dataBag = new RequestDataBag([
             LoginAsCustomerRoute::TOKEN => $token,
-            LoginAsCustomerRoute::SALES_CHANNEL_ID => TestDefaults::SALES_CHANNEL,
             LoginAsCustomerRoute::CUSTOMER_ID => $customerId,
             LoginAsCustomerRoute::USER_ID => $userId,
         ]);
 
-        $salesChannelContext = $this->createMock(SalesChannelContext::class);
-
         $response = $route->loginAsCustomer($dataBag, $salesChannelContext);
 
-        static::assertInstanceOf(ContextTokenResponse::class, $response);
+        static::assertEquals('newToken', $response->getToken());
     }
 }

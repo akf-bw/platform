@@ -24,7 +24,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
 {
     final public const TOKEN = 'token';
-    final public const SALES_CHANNEL_ID = 'salesChannelId';
     final public const CUSTOMER_ID = 'customerId';
     final public const USER_ID = 'userId';
 

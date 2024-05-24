@@ -590,22 +590,18 @@
         "/account/login/customer": {
             "post": {
                 "tags": ["Login & Registration"],
-                "summary": "Log in as a customer by token",
-                "description": "Logs in customers given the a generated token.",
+                "summary": "Imitate the log in as a customer",
+                "description": "Imitate the log in as a customer given a generated token.",
                 "operationId": "loginAsCustomer",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": ["token", "salesChannelId", "customerId", "userId"],
+                                "required": ["token", "customerId", "userId"],
                                 "properties": {
                                     "token": {
-                                        "description": "Login-Token",
-                                        "type": "string"
-                                    },
-                                    "salesChannelId": {
-                                        "description": "ID of the sales channel",
+                                        "description": "Generated login token",
                                         "type": "string"
                                     },
                                     "customerId": {
