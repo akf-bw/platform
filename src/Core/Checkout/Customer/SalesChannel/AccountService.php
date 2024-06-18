@@ -96,7 +96,7 @@ class AccountService extends AbstractAccountService
      * @throws BadCredentialsException
      * @throws CustomerNotFoundByIdException
      */
-    public function loginById(string $id, SalesChannelContext $context, ?string $userId = null): string
+    public function loginById(string $id, SalesChannelContext $context): string
     {
         if (!Uuid::isValid($id)) {
             throw CustomerException::badCredentials();
@@ -113,10 +113,10 @@ class AccountService extends AbstractAccountService
             throw CustomerException::customerNotFoundByIdException($id);
         }
 
-        $event = new CustomerBeforeLoginEvent($context, $customer->getEmail(), $userId);
+        $event = new CustomerBeforeLoginEvent($context, $customer->getEmail());
         $this->eventDispatcher->dispatch($event);
 
-        return $this->loginByCustomer($customer, $context, $userId);
+        return $this->loginByCustomer($customer, $context);
     }
 
     /**
@@ -175,7 +175,7 @@ class AccountService extends AbstractAccountService
         return !$customer->getDoubleOptInRegistration() || $customer->getDoubleOptInConfirmDate();
     }
 
-    private function loginByCustomer(CustomerEntity $customer, SalesChannelContext $context, ?string $userId = null): string
+    private function loginByCustomer(CustomerEntity $customer, SalesChannelContext $context): string
     {
         $this->customerRepository->update([
             [
@@ -187,7 +187,7 @@ class AccountService extends AbstractAccountService
         $context = $this->restorer->restore($customer->getId(), $context);
         $newToken = $context->getToken();
 
-        $event = new CustomerLoginEvent($context, $customer, $newToken, $userId);
+        $event = new CustomerLoginEvent($context, $customer, $newToken);
         $this->eventDispatcher->dispatch($event);
 
         return $newToken;
@@ -240,7 +240,7 @@ class AccountService extends AbstractAccountService
             }
 
             // It is bound, but not to the current one. Skip it
-            if ($customer->getBoundSalesChannelId() !== $context->getSalesChannelId()) {
+            if ($customer->getBoundSalesChannelId() !== $context->getSalesChannel()->getId()) {
                 return null;
             }
 

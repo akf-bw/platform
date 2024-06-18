@@ -3,6 +3,7 @@
 namespace Shopware\Core\Checkout\Customer\SalesChannel;
 
 use Shopware\Core\Checkout\Customer\LoginAsCustomerTokenGenerator;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
@@ -46,13 +47,15 @@ class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
     #[Route(path: '/store-api/account/login/customer', name: 'store-api.account.login-as-customer', methods: ['POST'])]
     public function loginAsCustomer(RequestDataBag $requestDataBag, SalesChannelContext $context): ContextTokenResponse
     {
-        $this->validateRequestDataFields($requestDataBag, $context);
+        $this->validateRequestDataFields($requestDataBag, $context->getContext());
 
         $token = $requestDataBag->getString(self::TOKEN);
         $customerId = $requestDataBag->getString(self::CUSTOMER_ID);
         $userId = $requestDataBag->getString(self::USER_ID);
 
         $this->tokenGenerator->validate($token, $context->getSalesChannelId(), $customerId, $userId);
+
+        // TODO: Add userId to $context
 
         $newToken = $this->accountService->loginById($customerId, $context, $userId);
 
@@ -62,18 +65,16 @@ class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
     /**
      * @throws ConstraintViolationException
      */
-    private function validateRequestDataFields(DataBag $data, SalesChannelContext $context): void
+    private function validateRequestDataFields(DataBag $data, Context $context): void
     {
-        $definition = new DataValidationDefinition('login.impersonation');
-
-        $frameworkContext = $context->getContext();
+        $definition = new DataValidationDefinition('impersonation.login');
 
         $definition
             ->add(self::TOKEN, new NotBlank())
-            ->add(self::CUSTOMER_ID, new Uuid(), new EntityExists(['entity' => 'customer', 'context' => $frameworkContext]))
-            ->add(self::USER_ID, new Uuid(), new EntityExists(['entity' => 'user', 'context' => $frameworkContext]));
+            ->add(self::CUSTOMER_ID, new Uuid(), new EntityExists(['entity' => 'customer', 'context' => $context]))
+            ->add(self::USER_ID, new Uuid(), new EntityExists(['entity' => 'user', 'context' => $context]));
 
-        $validationEvent = new BuildValidationEvent($definition, $data, $frameworkContext);
+        $validationEvent = new BuildValidationEvent($definition, $data, $context);
         $this->eventDispatcher->dispatch($validationEvent, $validationEvent->getName());
 
         $this->validator->validate($data->all(), $definition);

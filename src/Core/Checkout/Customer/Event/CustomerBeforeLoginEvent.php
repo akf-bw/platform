@@ -24,8 +24,7 @@ class CustomerBeforeLoginEvent extends Event implements SalesChannelAware, Shopw
 
     public function __construct(
         private readonly SalesChannelContext $salesChannelContext,
-        private readonly string $email,
-        private readonly ?string $userId = null,
+        private readonly string $email
     ) {
     }
 
@@ -47,11 +46,6 @@ class CustomerBeforeLoginEvent extends Event implements SalesChannelAware, Shopw
     public function getEmail(): string
     {
         return $this->email;
-    }
-
-    public function getUserId(): ?string
-    {
-        return $this->userId;
     }
 
     public function getSalesChannelContext(): SalesChannelContext

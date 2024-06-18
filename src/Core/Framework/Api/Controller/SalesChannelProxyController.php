@@ -26,10 +26,13 @@ use Shopware\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Routing\SalesChannelRequestContextResolver;
 use Shopware\Core\Framework\Util\Random;
+use Shopware\Core\Framework\Validation\BuildValidationEvent;
+use Shopware\Core\Framework\Validation\Constraint\Uuid;
 use Shopware\Core\Framework\Validation\DataBag\DataBag;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\Framework\Validation\DataValidationDefinition;
 use Shopware\Core\Framework\Validation\DataValidator;
+use Shopware\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Shopware\Core\PlatformRequest;
 use Shopware\Core\SalesChannelRequest;
 use Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister;
@@ -142,22 +145,11 @@ class SalesChannelProxyController extends AbstractController
     }
 
     #[Route(path: '/api/_proxy/login-as-customer-token-generate', name: 'api.proxy.login-as-customer-token-generate', methods: ['POST'], defaults: ['_acl' => ['api_proxy_login-as-customer']])]
-    public function loginAsCustomerTokenGenerate(Request $request, Context $context): Response
+    public function loginAsCustomerTokenGenerate(RequestDataBag $data, Context $context): Response
     {
-        if (!$request->request->has(self::SALES_CHANNEL_ID)) {
-            throw ApiException::salesChannelIdParameterIsMissing();
-        }
+        $this->validateLoginInAsCustomerDataFields($data, $context);
 
-        if (!$request->request->has(self::CUSTOMER_ID)) {
-            throw ApiException::customerIdParameterIsMissing();
-        }
-
-        $customerId = $request->request->getString('customerId');
-        if (!$this->doesCustomerExist($customerId, $context)) {
-            throw ApiException::resourceNotFound('customer', ['id' => $customerId]);
-        }
-
-        $salesChannelId = $request->request->getString(self::SALES_CHANNEL_ID);
+        $salesChannelId = $data->getString(self::SALES_CHANNEL_ID);
         $salesChannel = $this->fetchSalesChannel($salesChannelId, $context);
         if ($salesChannel->getDomains() === null || $salesChannel->getDomains()->first() === null) {
             throw ApiException::invalidSalesChannelId($salesChannelId);
@@ -172,6 +164,8 @@ class SalesChannelProxyController extends AbstractController
         if (!$userId) {
             throw new ExpectedUserHttpException();
         }
+
+        $customerId = $data->getString(self::CUSTOMER_ID);
 
         $token = $this->loginAsCustomerTokenGenerator->generate($salesChannelId, $customerId, $userId);
 
@@ -297,9 +291,21 @@ class SalesChannelProxyController extends AbstractController
         return $salesChannel;
     }
 
-    private function doesCustomerExist(string $customerId, Context $context): bool
+    /**
+     * @throws ConstraintViolationException
+     */
+    private function validateLoginInAsCustomerDataFields(DataBag $data, Context $context): void
     {
-        return $this->customerRepository->searchIds(new Criteria([$customerId]), $context)->has($customerId);
+        $definition = new DataValidationDefinition('impersonation.generate-token');
+
+        $definition
+            ->add(self::SALES_CHANNEL_ID, new NotBlank())
+            ->add(self::CUSTOMER_ID, new Uuid(), new EntityExists(['entity' => 'customer', 'context' => $context]));
+
+        $validationEvent = new BuildValidationEvent($definition, $data, $context);
+        $this->eventDispatcher->dispatch($validationEvent, $validationEvent->getName());
+
+        $this->validator->validate($data->all(), $definition);
     }
 
     private function getContextToken(Request $request): string
