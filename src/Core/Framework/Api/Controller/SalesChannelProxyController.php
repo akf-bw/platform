@@ -76,7 +76,6 @@ class SalesChannelProxyController extends AbstractController
     public function __construct(
         private readonly KernelInterface $kernel,
         private readonly EntityRepository $salesChannelRepository,
-        private readonly EntityRepository $customerRepository,
         protected DataValidator $validator,
         protected SalesChannelContextPersister $contextPersister,
         private readonly SalesChannelRequestContextResolver $requestContextResolver,

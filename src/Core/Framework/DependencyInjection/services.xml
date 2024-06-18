@@ -461,7 +461,6 @@ base-uri 'self';
         <service id="Shopware\Core\Framework\Api\Controller\SalesChannelProxyController" public="true">
             <argument type="service" id="kernel"/>
             <argument type="service" id="sales_channel.repository"/>
-            <argument type="service" id="customer.repository"/>
             <argument type="service" id="Shopware\Core\Framework\Validation\DataValidator"/>
             <argument type="service" id="Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister"/>
             <argument type="service" id="Shopware\Core\Framework\Routing\SalesChannelRequestContextResolver"/>

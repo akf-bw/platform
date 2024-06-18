@@ -14,6 +14,8 @@ use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\Framework\Validation\DataValidationDefinition;
 use Shopware\Core\Framework\Validation\DataValidator;
 use Shopware\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister;
+use Shopware\Core\System\SalesChannel\Context\SalesChannelContextService;
 use Shopware\Core\System\SalesChannel\ContextTokenResponse;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,6 +36,7 @@ class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
     public function __construct(
         private readonly AccountService $accountService,
         private readonly LoginAsCustomerTokenGenerator $tokenGenerator,
+        private readonly SalesChannelContextPersister $contextPersister,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly DataValidator $validator
     ) {
@@ -55,9 +58,13 @@ class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
 
         $this->tokenGenerator->validate($token, $context->getSalesChannelId(), $customerId, $userId);
 
-        // TODO: Add userId to $context
+        $context->setImitatingUserId($userId);
 
-        $newToken = $this->accountService->loginById($customerId, $context, $userId);
+        $this->contextPersister->save($context->getToken(), [
+            SalesChannelContextService::IMITATING_USER_ID => $userId,
+        ], $context->getSalesChannelId());
+
+        $newToken = $this->accountService->loginById($customerId, $context);
 
         return new ContextTokenResponse($newToken);
     }

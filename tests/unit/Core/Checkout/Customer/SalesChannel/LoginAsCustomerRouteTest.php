@@ -11,6 +11,7 @@ use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\Framework\Validation\DataValidator;
+use Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\Test\TestDefaults;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -41,6 +42,7 @@ class LoginAsCustomerRouteTest extends TestCase
         $route = new LoginAsCustomerRoute(
             $accountService,
             $loginAsCustomerTokenGenerator,
+            $this->createMock(SalesChannelContextPersister::class),
             $this->createMock(EventDispatcherInterface::class),
             $this->createMock(DataValidator::class),
         );
