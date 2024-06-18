@@ -69,14 +69,18 @@ export default {
             ).then((response) => {
                 const handledResponse = ApiService.handleResponse(response);
 
-                window.open(
-                    this.buildSalesChannelUrl(
-                        salesChannelDomainUrl,
-                        handledResponse.token,
-                        this.customer.id,
-                        this.currentUser?.id,
-                    ),
+                const salesChannelUrl = this.buildSalesChannelUrl(
+                    salesChannelDomainUrl,
+                    handledResponse.token,
+                    this.customer.id,
+                    this.currentUser?.id,
                 );
+
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = salesChannelUrl;
+                document.body.appendChild(form);
+                form.submit();
             }).catch(() => {
                 this.createNotificationError({
                     message: this.$tc('sw-customer.detail.notificationLoginAsCustomerErrorMessage'),
