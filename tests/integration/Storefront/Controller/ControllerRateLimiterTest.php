@@ -179,7 +179,7 @@ class ControllerRateLimiterTest extends TestCase
         $crawler = new Crawler();
         $crawler->addHtmlContent((string) $contentReturn);
 
-        $errorContent = $crawler->filterXPath('//div[@class="flashbags container"]//div[@class="alert-content"]')->text();
+        $errorContent = $crawler->filterXPath('//div[@class="flashbags container"]//div[@class="alert-content-container"]')->text();
 
         static::assertStringContainsString($this->translator->trans('account.loginThrottled', ['%seconds%' => 5]), $errorContent);
     }
@@ -215,7 +215,7 @@ class ControllerRateLimiterTest extends TestCase
         $crawler = new Crawler();
         $crawler->addHtmlContent((string) $contentReturn);
 
-        $errorContent = $crawler->filterXPath('//form[@class="login-form"]//div[@class="alert-content"]')->text();
+        $errorContent = $crawler->filterXPath('//form[@class="login-form"]//div[@class="alert-content-container"]')->text();
 
         static::assertStringContainsString($this->translator->trans('account.loginThrottled', ['%seconds%' => 5], 'messages', 'en-GB'), $errorContent);
     }
@@ -246,7 +246,7 @@ class ControllerRateLimiterTest extends TestCase
         $crawler = new Crawler();
         $crawler->addHtmlContent($contentReturn);
 
-        $errorContent = $crawler->filterXPath('//div[@class="alert-content"]')->text();
+        $errorContent = $crawler->filterXPath('//div[@class="alert-content-container"]')->text();
 
         static::assertStringContainsString($this->translator->trans('error.rateLimitExceeded', ['%seconds%' => 5]), $errorContent);
     }
@@ -306,7 +306,7 @@ class ControllerRateLimiterTest extends TestCase
             $crawler = new Crawler();
             $crawler->addHtmlContent((string) $contentReturn);
 
-            $errorContent = $crawler->filterXPath('//div[@class="flashbags container"]//div[@class="alert-content"]')->text();
+            $errorContent = $crawler->filterXPath('//div[@class="flashbags container"]//div[@class="alert-content-container"]')->text();
 
             if ($i >= 10) {
                 static::assertStringContainsString($this->translator->trans('account.loginThrottled', ['%seconds%' => $waitTime]), $errorContent);

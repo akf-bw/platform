@@ -5,6 +5,13 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="maker.auto_command.abstract" class="Shopware\Core\Framework\Plugin\Command\MakerCommand" abstract="true">
+            <argument /> <!-- maker -->
+            <argument type="service" id="Shopware\Core\Framework\Plugin\Command\Scaffolding\ScaffoldingCollector"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\Command\Scaffolding\ScaffoldingWriter"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginService"/>
+        </service>
+
         <service id="Shopware\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader" public="true">
             <factory service="kernel" method="getPluginLoader" />
         </service>
@@ -59,6 +66,8 @@
             <argument type="service" id="Shopware\Core\System\CustomEntity\CustomEntityLifecycleService"/>
             <argument type="service" id="Shopware\Core\Framework\Plugin\PluginService"/>
             <argument type="service" id="Shopware\Core\Framework\Plugin\Util\VersionSanitizer"/>
+
+            <tag name="kernel.event_subscriber"/>
         </service>
 
         <service id="Shopware\Core\Framework\Plugin\PluginManagementService">

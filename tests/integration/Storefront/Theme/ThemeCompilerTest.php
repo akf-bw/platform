@@ -23,12 +23,8 @@ use Shopware\Core\Kernel;
 use Shopware\Core\System\SystemConfig\Service\ConfigurationService;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Core\System\SystemConfig\Util\ConfigReader;
-use Shopware\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Shopware\Core\Test\TestDefaults;
 use Shopware\Storefront\Event\ThemeCompilerConcatenatedStylesEvent;
-use Shopware\Storefront\Test\Theme\fixtures\MockThemeCompilerConcatenatedSubscriber;
-use Shopware\Storefront\Test\Theme\fixtures\MockThemeVariablesSubscriber;
-use Shopware\Storefront\Test\Theme\fixtures\SimplePlugin\SimplePlugin;
 use Shopware\Storefront\Theme\Event\ThemeCompilerEnrichScssVariablesEvent;
 use Shopware\Storefront\Theme\MD5ThemePathBuilder;
 use Shopware\Storefront\Theme\ScssPhpCompiler;
@@ -43,6 +39,9 @@ use Shopware\Storefront\Theme\ThemeCompiler;
 use Shopware\Storefront\Theme\ThemeFileImporter;
 use Shopware\Storefront\Theme\ThemeFileResolver;
 use Shopware\Tests\Integration\Core\Framework\App\AppSystemTestBehaviour;
+use Shopware\Tests\Integration\Storefront\Theme\fixtures\MockThemeCompilerConcatenatedSubscriber;
+use Shopware\Tests\Integration\Storefront\Theme\fixtures\MockThemeVariablesSubscriber;
+use Shopware\Tests\Integration\Storefront\Theme\fixtures\SimplePlugin\SimplePlugin;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -91,7 +90,6 @@ class ThemeCompilerTest extends TestCase
             $this->getContainer()->getParameter('kernel.project_dir'),
             $this->getContainer()->get(ScssPhpCompiler::class),
             new MessageBus(),
-            new StaticSystemConfigService(),
             0,
             false
         );
@@ -110,7 +108,6 @@ class ThemeCompilerTest extends TestCase
             $this->getContainer()->getParameter('kernel.project_dir'),
             $this->getContainer()->get(ScssPhpCompiler::class),
             new MessageBus(),
-            new StaticSystemConfigService(),
             0,
             true
         );
@@ -443,7 +440,6 @@ PHP_EOL;
             $this->getContainer()->getParameter('kernel.project_dir'),
             $this->getContainer()->get(ScssPhpCompiler::class),
             new MessageBus(),
-            new StaticSystemConfigService(),
             0,
             false
         );

@@ -1,3 +1,5 @@
+import { MtFloatingUi } from "@shopware-ag/meteor-component-library";
+
 const RuleTester = require('eslint').RuleTester
 const rule = require('./no-deprecated-components');
 
@@ -94,6 +96,14 @@ tester.run('no-deprecated-components', rule, {
             </template>`
         },
         {
+            name: '"mt-url-field" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-url-field />
+            </template>`
+        },
+        {
             name: '"mt-select" usage is allowed',
             filename: 'test.html.twig',
             code: `
@@ -123,6 +133,47 @@ tester.run('no-deprecated-components', rule, {
             code: `
             <template>
                 <mt-number-field />
+            </template>`
+        },
+        {
+            name: '"mt-password-field" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-password-field />
+            </template>`
+        },
+        {
+            name: '"mt-progress-bar" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-progress-bar />
+            </template>`
+        },
+        {
+            name: '"mt-data-table" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-data-table />
+            </template>`
+        },
+        {
+            name: '"sw-data-grid" usage is not allowed',
+            filename: 'test.html.twig',
+            code: `
+<template>
+    <!-- TODO Codemod: This component need to be manually replaced with mt-data-table -->
+    <sw-data-grid />
+</template>`,
+        },
+        {
+            name: '"mt-floating-ui" usage is allowed',
+            filename: 'test.html.twig',
+            code: `
+            <template>
+                <mt-floating-ui />
             </template>`
         }
     ],
@@ -546,6 +597,147 @@ tester.run('no-deprecated-components', rule, {
             errors: [{
                 message: '"sw-skeleton-bar" is deprecated. Please use "mt-skeleton-bar" instead.',
             }]
+        },
+        {
+            name: '"sw-password-field" usage is not allowed',
+            filename: 'test.html.twig',
+            code: `
+<template>
+    <sw-password-field />
+</template>`,
+            output: `
+<template>
+    <!-- TODO Codemod: Converted from sw-password-field - please check if everything works correctly -->
+    <mt-password-field />
+</template>`,
+            errors: [{
+                message: '"sw-password-field" is deprecated. Please use "mt-password-field" instead.',
+            }]
+        },
+        {
+            name: '"sw-password-field" usage is not allowed [disableFix]',
+            filename: 'test.html.twig',
+            options: ['disableFix'],
+            code: `
+<template>
+    <sw-password-field />
+</template>`,
+            errors: [{
+                message: '"sw-password-field" is deprecated. Please use "mt-password-field" instead.',
+            }]
+        },
+        {
+            name: '"sw-url-field" usage is not allowed',
+            filename: 'test.html.twig',
+            code: `
+<template>
+    <sw-url-field />
+</template>`,
+            output: `
+<template>
+    <!-- TODO Codemod: Converted from sw-url-field - please check if everything works correctly -->
+    <mt-url-field />
+</template>`,
+            errors: [{
+                message: '"sw-url-field" is deprecated. Please use "mt-url-field" instead.',
+            }]
+        },
+        {
+            name: '"sw-url-field" usage is not allowed [disableFix]',
+            filename: 'test.html.twig',
+            options: ['disableFix'],
+            code: `
+<template>
+    <sw-url-field />
+</template>`,
+            errors: [{
+                message: '"sw-url-field" is deprecated. Please use "mt-url-field" instead.',
+            }]
+        },
+        {
+            name: '"sw-progress-bar" usage is not allowed',
+            filename: 'test.html.twig',
+            code: `
+<template>
+    <sw-progress-bar />
+</template>`,
+            output: `
+<template>
+    <!-- TODO Codemod: Converted from sw-progress-bar - please check if everything works correctly -->
+    <mt-progress-bar />
+</template>`,
+            errors: [{
+                message: '"sw-progress-bar" is deprecated. Please use "mt-progress-bar" instead.',
+            }]
+        },
+        {
+            name: '"sw-progress-bar" usage is not allowed [disableFix]',
+            filename: 'test.html.twig',
+            options: ['disableFix'],
+            code: `
+<template>
+    <sw-progress-bar />
+</template>`,
+            errors: [{
+                message: '"sw-progress-bar" is deprecated. Please use "mt-progress-bar" instead.',
+            }]
+        },
+        {
+            name: '"sw-data-grid" usage is not allowed',
+            filename: 'test.html.twig',
+            code: `
+<template>
+    <sw-data-grid />
+</template>`,
+            output: `
+<template>
+    <!-- TODO Codemod: This component need to be manually replaced with mt-data-table -->
+    <sw-data-grid />
+</template>`,
+            errors: [{
+                message: '"sw-data-grid" is deprecated. Please use "mt-data-table" instead.',
+            }]
+        },
+        {
+            name: '"sw-data-grid" usage is not allowed [disableFix]',
+            filename: 'test.html.twig',
+            options: ['disableFix'],
+            code: `
+<template>
+    <sw-data-grid />
+</template>`,
+            errors: [{
+                message: '"sw-data-grid" is deprecated. Please use "mt-data-table" instead.',
+            }]
+        },
+        {
+            name: '"sw-popover" usage is not allowed',
+            filename: 'test.html.twig',
+            code: `
+<template>
+    <sw-popover />
+</template>`,
+            output: `
+<template>
+    <!-- TODO Codemod: Converted from sw-popover - please check if everything works correctly -->
+    <mt-floating-ui />
+</template>`,
+            errors: [{
+                message: '"sw-popover" is deprecated. Please use "mt-floating-ui" instead.',
+            }]
+        },
+        {
+            name: '"sw-popover" usage is not allowed [disableFix]',
+            filename: 'test.html.twig',
+            options: ['disableFix'],
+            code: `
+<template>
+    <sw-popover />
+</template>`,
+            errors: [{
+                message: '"sw-popover" is deprecated. Please use "mt-floating-ui" instead.',
+            }]
         }
     ]
 })
+

@@ -23,13 +23,13 @@ use Shopware\Core\Framework\Event\MailAware;
 use Shopware\Core\Framework\Event\OrderAware;
 use Shopware\Core\Framework\Event\SalesChannelAware;
 use Shopware\Core\Framework\Plugin;
-use Shopware\Core\Framework\Test\Adapter\Twig\fixtures\BundleFixture;
 use Shopware\Core\Framework\Test\IdsCollection;
 use Shopware\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Kernel;
 use Shopware\Core\Maintenance\System\Service\AppUrlVerifier;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use Shopware\Core\Test\Stub\Framework\BundleFixture;
 use Shopware\Tests\Integration\Core\Framework\App\AppSystemTestBehaviour;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\Packages;
@@ -66,6 +66,7 @@ class InfoControllerTest extends TestCase
                 'private_allowed_extensions' => $this->getContainer()->getParameter('shopware.filesystem.private_allowed_extensions'),
                 'enableHtmlSanitizer' => $this->getContainer()->getParameter('shopware.html_sanitizer.enabled'),
                 'enableStagingMode' => false,
+                'disableExtensionManagement' => false,
             ],
         ];
 
@@ -330,6 +331,7 @@ class InfoControllerTest extends TestCase
                 'shopware.html_sanitizer.enabled' => true,
                 'shopware.media.enable_url_upload_feature' => true,
                 'shopware.staging.administration.show_banner' => true,
+                'shopware.deployment.runtime_extension_management' => true,
             ]),
             $kernelMock,
             $packagesMock,
@@ -392,6 +394,7 @@ class InfoControllerTest extends TestCase
                 'shopware.html_sanitizer.enabled' => true,
                 'shopware.media.enable_url_upload_feature' => true,
                 'shopware.staging.administration.show_banner' => false,
+                'shopware.deployment.runtime_extension_management' => true,
             ]),
             $kernelMock,
             $packagesMock,
@@ -468,6 +471,7 @@ class InfoControllerTest extends TestCase
                 'shopware.html_sanitizer.enabled' => true,
                 'shopware.media.enable_url_upload_feature' => true,
                 'shopware.staging.administration.show_banner' => false,
+                'shopware.deployment.runtime_extension_management' => true,
             ]),
             $kernelMock,
             $assets,

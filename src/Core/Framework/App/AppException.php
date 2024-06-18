@@ -27,10 +27,13 @@ class AppException extends HttpException
     public const INVALID_CONFIGURATION = 'FRAMEWORK__APP_INVALID_CONFIGURATION';
     public const JWT_GENERATION_REQUIRES_CUSTOMER_LOGGED_IN = 'FRAMEWORK__APP_JWT_GENERATION_REQUIRES_CUSTOMER_LOGGED_IN';
     public const FEATURES_REQUIRE_APP_SECRET = 'FRAMEWORK__APP_FEATURES_REQUIRE_APP_SECRET';
+    public const APP_SECRET_MISSING = 'FRAMEWORK__APP_SECRET_MISSING';
     public const ACTION_BUTTON_PROCESS_EXCEPTION = 'FRAMEWORK__SYNC_ACTION_PROCESS_INTERRUPTED';
     public const INSTALLATION_FAILED = 'FRAMEWORK__APP_INSTALLATION_FAILED';
     public const XML_PARSE_ERROR = 'FRAMEWORK_APP__XML_PARSE_ERROR';
     public const MISSING_REQUEST_PARAMETER_CODE = 'FRAMEWORK__APP_MISSING_REQUEST_PARAMETER';
+
+    public const CHECKOUT_GATEWAY_PAYLOAD_INVALID_CODE = 'FRAMEWORK__APP_CHECKOUT_GATEWAY_PAYLOAD_INVALID';
 
     /**
      * @internal will be removed once store extensions are installed over composer
@@ -156,6 +159,16 @@ class AppException extends HttpException
         );
     }
 
+    public static function appSecretMissing(string $appName): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::APP_SECRET_MISSING,
+            'App secret is missing for app {{ appName }}',
+            ['appName' => $appName]
+        );
+    }
+
     public static function actionButtonProcessException(string $actionId, string $message, ?\Throwable $e = null): self
     {
         return new self(
@@ -214,6 +227,15 @@ class AppException extends HttpException
             self::MISSING_REQUEST_PARAMETER_CODE,
             'Parameter "{{ parameterName }}" is missing.',
             ['parameterName' => $parameterName]
+        );
+    }
+
+    public static function checkoutGatewayPayloadInvalid(): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::CHECKOUT_GATEWAY_PAYLOAD_INVALID_CODE,
+            'The checkout gateway payload is invalid'
         );
     }
 }

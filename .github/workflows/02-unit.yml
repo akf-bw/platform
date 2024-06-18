@@ -17,11 +17,11 @@ jobs:
         suite:
           # some suites are merged to reduce the number of jobs
           - integration
-          - storefront
           - content
           - framework
           - unit
           - migration,migration-tests
+          - devops
     env:
       APP_ENV: test
       DATABASE_URL: mysql://root@127.0.0.1:3306/root

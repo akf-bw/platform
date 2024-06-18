@@ -103,6 +103,7 @@ describe('src/module/sw-first-run-wizard/view/sw-first-run-wizard-welcome', () =
                     'sw-base-field': await wrapTestComponent('sw-base-field'),
                     'sw-field-error': await wrapTestComponent('sw-field-error'),
                     'sw-password-field': await wrapTestComponent('sw-password-field'),
+                    'sw-password-field-deprecated': await wrapTestComponent('sw-password-field-deprecated'),
                     'sw-text-field': await wrapTestComponent('sw-text-field'),
                     'sw-text-field-deprecated': await wrapTestComponent('sw-text-field-deprecated', { sync: true }),
                     'sw-contextual-field': await wrapTestComponent('sw-contextual-field'),
@@ -163,6 +164,31 @@ describe('src/module/sw-first-run-wizard/view/sw-first-run-wizard-welcome', () =
             },
         });
     }
+
+    beforeAll(() => {
+        if (Shopware.State.get('context')) {
+            Shopware.State.unregisterModule('context');
+        }
+
+        Shopware.State.registerModule('context', {
+            namespaced: true,
+            state: {
+                app: {
+                    config: {
+                        settings: {
+                            disableExtensionManagement: false,
+                        },
+                    },
+                },
+                api: {
+                    assetPath: 'http://localhost:8000/bundles/administration/',
+                    authToken: {
+                        token: 'testToken',
+                    },
+                },
+            },
+        });
+    });
 
     it('should install the SwagLanguagePack plugin and show the language switch modal', async () => {
         const wrapper = await createWrapper();

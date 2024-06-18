@@ -1,28 +1,23 @@
 import { test, expect } from '@fixtures/AcceptanceTest';
 
 test('Journey: Customer gets a special product price depending on rules. @journey @checkout', async ({
-    shopCustomer,
-    productData,
-    productDetailPage,
+    ShopCustomer,
+    AdminApiContext,
+    SalesChannelBaseConfig,
+    ProductData,
+    StorefrontProductDetail,
     AddProductToCart,
-    adminApiContext,
-    storeBaseConfig,
-
 }) => {
-    test.info().annotations.push({
-        type: 'Description',
-        description:
-            'This scenario tests if a certain product price can be realised with the help of a default rule.',
-    });
 
-    const response = await adminApiContext.post('./search/rule', {
+    // what is this testing? the rule is always valid
+    const response = await AdminApiContext.post('./search/rule', {
         data: {
             limit: 1,
             filter: [
                 {
                     type: 'equals',
                     field: 'name',
-                    value: 'Cart >= 0',
+                    value: 'Always valid (Default)',
                 },
             ],
         },
@@ -32,12 +27,18 @@ test('Journey: Customer gets a special product price depending on rules. @journe
 
     const rule = responseJson.data[0]
 
-    const priceResponse = await adminApiContext.post('./product-price', {
+    const priceResponse = await AdminApiContext.post('./product-price', {
         data: {
-            productId: productData.id,
+            productId: ProductData.id,
             ruleId: rule.id,
             price: [{
-                currencyId: storeBaseConfig.eurCurrencyId,
+                currencyId: SalesChannelBaseConfig.eurCurrencyId,
+                gross: 99.99,
+                linked: false,
+                net: 93.45,
+            },
+            {
+                currencyId: SalesChannelBaseConfig.defaultCurrencyId,
                 gross: 99.99,
                 linked: false,
                 net: 93.45,
@@ -47,13 +48,13 @@ test('Journey: Customer gets a special product price depending on rules. @journe
         },
     });
 
-    await expect(priceResponse.ok()).toBeTruthy();
+    expect(priceResponse.ok()).toBeTruthy();
 
-    await shopCustomer.goesTo(productDetailPage);
-    await shopCustomer.expects(productDetailPage.page).toHaveTitle(
-        `${productData.translated.name} | ${productData.productNumber}`
+    await ShopCustomer.goesTo(StorefrontProductDetail.url(ProductData));
+    await ShopCustomer.expects(StorefrontProductDetail.page).toHaveTitle(
+        `${ProductData.translated.name} | ${ProductData.productNumber}`
     );
-    await shopCustomer.attemptsTo(AddProductToCart(productData));
-    await shopCustomer.expects(productDetailPage.offCanvasSummaryTotalPrice).toHaveText('€99.99*');
+    await ShopCustomer.attemptsTo(AddProductToCart(ProductData));
+    await ShopCustomer.expects(StorefrontProductDetail.offCanvasSummaryTotalPrice).toHaveText('€99.99*');
 });
 
