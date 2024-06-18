@@ -120,7 +120,6 @@
     "/_proxy-order/{salesChannelId}",
     "/_proxy/disable-automatic-promotions",
     "/_proxy/enable-automatic-promotions",
-    "/_proxy/login-as-customer-token-generate",
     "/_proxy/modify-shipping-costs",
     "/_proxy/store-api/{salesChannelId}/{_path}",
     "/_proxy/switch-customer",

@@ -587,12 +587,12 @@
                 ]
             }
         },
-        "/account/login/customer": {
+        "/account/login/imitate-customer": {
             "post": {
                 "tags": ["Login & Registration"],
                 "summary": "Imitate the log in as a customer",
                 "description": "Imitate the log in as a customer given a generated token.",
-                "operationId": "loginAsCustomer",
+                "operationId": "imitateCustomerLogin",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -601,7 +601,7 @@
                                 "required": ["token", "customerId", "userId"],
                                 "properties": {
                                     "token": {
-                                        "description": "Generated login token",
+                                        "description": "Generated customer impersonation token",
                                         "type": "string"
                                     },
                                     "customerId": {
@@ -609,7 +609,7 @@
                                         "type": "string"
                                     },
                                     "userId": {
-                                        "description": "ID of the user",
+                                        "description": "ID of the user who generated the token",
                                         "type": "string"
                                     }
                                 },

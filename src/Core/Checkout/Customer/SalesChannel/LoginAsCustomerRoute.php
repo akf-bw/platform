@@ -44,7 +44,7 @@ class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
         throw new DecorationPatternException(self::class);
     }
 
-    #[Route(path: '/store-api/account/login/customer', name: 'store-api.account.login-as-customer', methods: ['POST'])]
+    #[Route(path: '/store-api/account/login/imitate-customer', name: 'store-api.account.imitate-customer-login', methods: ['POST'])]
     public function loginAsCustomer(RequestDataBag $requestDataBag, SalesChannelContext $context): ContextTokenResponse
     {
         $this->validateRequestDataFields($requestDataBag, $context->getContext());

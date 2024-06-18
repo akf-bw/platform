@@ -318,7 +318,7 @@ class AuthController extends StorefrontController
         return $this->redirectToRoute('frontend.account.profile.page');
     }
 
-    #[Route(path: '/account/login/customer/{token}/{customerId}/{userId}', name: 'frontend.account.login.customer', methods: ['GET'])]
+    #[Route(path: '/account/login/imitate-customer/{token}/{customerId}/{userId}', name: 'frontend.account.login.imitate-customer', methods: ['GET'])]
     public function loginAsCustomer(string $token, string $customerId, string $userId, SalesChannelContext $context, Request $request): Response
     {
         try {

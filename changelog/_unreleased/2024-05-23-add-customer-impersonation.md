@@ -15,10 +15,10 @@ author_github: ugurkankya, sobyte, akf-bw
 * Changed `Core/Framework/Api/ApiDefinition/Generator/Schema/StoreApi/paths/account.json` to include the `account/login/customer` route
 ___
 # Storefront
-* Added `/account/login/customer/{token}/{customerId}/{userId}` to `Storefront/Controller/AuthController` for allowing to log in as customer
+* Added `/account/login/imitate-customer/{token}/{customerId}/{userId}` to `Storefront/Controller/AuthController` for allowing to log in as customer
 ___
 # Store API
-* Added `/store-api/account/login/customer` for allowing to log in as customer and returning new token
+* Added `/store-api/account/login/imitate-customer` for allowing to log in as customer and returning new token
 ___
 # Administration
 * Added new modal in `module/sw-customer/component/sw-customer-login-as-customer-modal/index.js`

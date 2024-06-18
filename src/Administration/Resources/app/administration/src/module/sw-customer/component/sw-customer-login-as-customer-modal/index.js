@@ -98,7 +98,7 @@ export default {
         },
 
         buildSalesChannelUrl(salesChannelDomainUrl, token, customerId, userId) {
-            return `${salesChannelDomainUrl}/account/login/customer/${token}/${customerId}/${userId}`;
+            return `${salesChannelDomainUrl}/account/login/imitate-customer/${token}/${customerId}/${userId}`;
         },
     },
 };

@@ -1,0 +1,59 @@
+{
+    "openapi": "3.0.0",
+    "info": [],
+    "paths": {
+        "\/_proxy\/login-as-customer-token-generate": {
+            "post": {
+                "tags": [
+                    "Customer impersonation"
+                ],
+                "summary": "Generate a customer impersonation token",
+                "description": "Generates a customer impersonation token for the given customer and sales channel.\n\nThe token can be used to authenticate as the customer in the sales channel.",
+                "operationId": "generateCustomerImpersonationToken",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": ["customerId", "salesChannelId"],
+                                "properties": {
+                                    "customerId": {
+                                        "description": "ID of the customer",
+                                        "type": "string"
+                                    },
+                                    "salesChannelId": {
+                                        "description": "ID of the sales channel",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The generated customer impersonation token & a redirect URL to the sales channel.",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "The generated customer impersonation token",
+                                            "type": "string"
+                                        },
+                                        "redirectUrl": {
+                                            "description": "The redirect URL to the sales channel",
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
