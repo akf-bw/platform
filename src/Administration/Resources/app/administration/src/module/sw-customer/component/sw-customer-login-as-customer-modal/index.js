@@ -69,18 +69,12 @@ export default {
             ).then((response) => {
                 const handledResponse = ApiService.handleResponse(response);
 
-                const salesChannelUrl = this.buildSalesChannelUrl(
+                this.redirectToSalesChannelUrl(
                     salesChannelDomainUrl,
                     handledResponse.token,
                     this.customer.id,
                     this.currentUser?.id,
                 );
-
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = salesChannelUrl;
-                document.body.appendChild(form);
-                form.submit();
             }).catch(() => {
                 this.createNotificationError({
                     message: this.$tc('sw-customer.detail.notificationLoginAsCustomerErrorMessage'),
@@ -101,8 +95,26 @@ export default {
             });
         },
 
-        buildSalesChannelUrl(salesChannelDomainUrl, token, customerId, userId) {
-            return `${salesChannelDomainUrl}/account/login/imitate-customer/${token}/${customerId}/${userId}`;
+        redirectToSalesChannelUrl(salesChannelDomainUrl, token, customerId, userId) {
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `${salesChannelDomainUrl}/account/login/imitate-customer`;
+            document.body.appendChild(form);
+
+            this.createHiddenInput(form, 'token', token);
+            this.createHiddenInput(form, 'customerId', customerId);
+            this.createHiddenInput(form, 'userId', userId);
+
+            form.submit();
         },
+
+        createHiddenInput(form, name, value) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = value;
+            form.appendChild(input);
+        }
     },
 };

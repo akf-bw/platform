@@ -16,7 +16,6 @@ use Shopware\Core\Checkout\Customer\SalesChannel\AbstractLoginRoute;
 use Shopware\Core\Checkout\Customer\SalesChannel\AbstractLogoutRoute;
 use Shopware\Core\Checkout\Customer\SalesChannel\AbstractResetPasswordRoute;
 use Shopware\Core\Checkout\Customer\SalesChannel\AbstractSendPasswordRecoveryMailRoute;
-use Shopware\Core\Checkout\Customer\SalesChannel\LoginAsCustomerRoute;
 use Shopware\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
@@ -318,17 +317,11 @@ class AuthController extends StorefrontController
         return $this->redirectToRoute('frontend.account.profile.page');
     }
 
-    #[Route(path: '/account/login/imitate-customer/{token}/{customerId}/{userId}', name: 'frontend.account.login.imitate-customer', methods: ['POST'])]
-    public function loginAsCustomer(string $token, string $customerId, string $userId, SalesChannelContext $context, Request $request): Response
+    #[Route(path: '/account/login/imitate-customer', name: 'frontend.account.login.imitate-customer', methods: ['POST'])]
+    public function loginAsCustomer(RequestDataBag $data, SalesChannelContext $context, Request $request): Response
     {
         try {
-            $dataBag = new RequestDataBag([
-                LoginAsCustomerRoute::TOKEN => $token,
-                LoginAsCustomerRoute::CUSTOMER_ID => $customerId,
-                LoginAsCustomerRoute::USER_ID => $userId,
-            ]);
-
-            $contextToken = $this->loginAsCustomerRoute->loginAsCustomer($dataBag, $context)->getToken();
+            $contextToken = $this->loginAsCustomerRoute->loginAsCustomer($data, $context)->getToken();
 
             $newContext = $this->salesChannelContextService->get(
                 new SalesChannelContextServiceParameters(
