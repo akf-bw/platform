@@ -32,7 +32,7 @@ class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
      * @internal
      */
     public function __construct(
-        private readonly AbstractAccountService $accountService,
+        private readonly AccountService $accountService,
         private readonly LoginAsCustomerTokenGenerator $tokenGenerator,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly DataValidator $validator

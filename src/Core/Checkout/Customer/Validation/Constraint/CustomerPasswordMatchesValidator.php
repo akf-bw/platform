@@ -3,7 +3,7 @@
 namespace Shopware\Core\Checkout\Customer\Validation\Constraint;
 
 use Shopware\Core\Checkout\Customer\Exception\BadCredentialsException;
-use Shopware\Core\Checkout\Customer\SalesChannel\AbstractAccountService;
+use Shopware\Core\Checkout\Customer\SalesChannel\AccountService;
 use Shopware\Core\Framework\Log\Package;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -14,7 +14,7 @@ class CustomerPasswordMatchesValidator extends ConstraintValidator
     /**
      * @internal
      */
-    public function __construct(private readonly AbstractAccountService $accountService)
+    public function __construct(private readonly AccountService $accountService)
     {
     }
 

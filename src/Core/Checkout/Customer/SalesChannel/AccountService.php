@@ -20,7 +20,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Shopware\Core\Framework\Feature;
 use Shopware\Core\Framework\Log\Package;
-use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\Framework\Uuid\Exception\InvalidUuidException;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\Validation\WriteConstraintViolationException;
@@ -31,7 +30,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Validator\ConstraintViolation;
 
 #[Package('checkout')]
-class AccountService extends AbstractAccountService
+class AccountService
 {
     /**
      * @internal
@@ -43,11 +42,6 @@ class AccountService extends AbstractAccountService
         private readonly AbstractSwitchDefaultAddressRoute $switchDefaultAddressRoute,
         private readonly CartRestorer $restorer
     ) {
-    }
-
-    public function getDecorated(): AbstractAccountService
-    {
-        throw new DecorationPatternException(self::class);
     }
 
     /**

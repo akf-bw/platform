@@ -9,11 +9,11 @@ use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Checkout\Customer\CustomerException;
 use Shopware\Core\Checkout\Customer\Exception\AddressNotFoundException;
 use Shopware\Core\Checkout\Customer\Exception\CannotDeleteDefaultAddressException;
-use Shopware\Core\Checkout\Customer\SalesChannel\AbstractAccountService;
 use Shopware\Core\Checkout\Customer\SalesChannel\AbstractChangeCustomerProfileRoute;
 use Shopware\Core\Checkout\Customer\SalesChannel\AbstractDeleteAddressRoute;
 use Shopware\Core\Checkout\Customer\SalesChannel\AbstractListAddressRoute;
 use Shopware\Core\Checkout\Customer\SalesChannel\AbstractUpsertAddressRoute;
+use Shopware\Core\Checkout\Customer\SalesChannel\AccountService;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Log\Package;
@@ -52,7 +52,7 @@ class AddressController extends StorefrontController
     public function __construct(
         private readonly AddressListingPageLoader $addressListingPageLoader,
         private readonly AddressDetailPageLoader $addressDetailPageLoader,
-        private readonly AbstractAccountService $accountService,
+        private readonly AccountService $accountService,
         private readonly AbstractListAddressRoute $listAddressRoute,
         private readonly AbstractUpsertAddressRoute $updateAddressRoute,
         private readonly AbstractDeleteAddressRoute $deleteAddressRoute,

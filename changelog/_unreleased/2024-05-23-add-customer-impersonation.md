@@ -12,10 +12,6 @@ author_github: ugurkankya, sobyte, akf-bw
 * Added `Core/Checkout/Customer/SalesChannel/AbstractLoginAsCustomerRoute`
 * Added `Core/Checkout/Customer/SalesChannel/LoginAsCustomerRoute`
 * Added `/api/_proxy/login-as-customer-token-generate` to `Core/Framework/Api/Controller/SalesChannelProxyController`
-* Added `Core/Checkout/Customer/SalesChannel/AbstractAccountService`
-* Changed `Core/Checkout/Customer/Event/CustomerBeforeLoginEvent` to add optional `userId`
-* Changed `Core/Checkout/Customer/Event/CustomerLoginEvent` to add optional `userId`
-* Changed `Core/Checkout/Customer/SalesChannel/AccountService` to add optional `userId` & `forcedSalesChannelId` to `loginById`
 * Changed `Core/Framework/Api/ApiDefinition/Generator/Schema/StoreApi/paths/account.json` to include the `account/login/customer` route
 ___
 # Storefront

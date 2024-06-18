@@ -51,6 +51,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
@@ -169,19 +170,24 @@ class SalesChannelProxyController extends AbstractController
 
         $token = $this->loginAsCustomerTokenGenerator->generate($salesChannelId, $customerId, $userId);
 
-        $redirectUrlWithToken = sprintf(
-            '%s/%s',
-            $salesChannel->getDomains()->first()->getUrl(),
-            $this->generateUrl('frontend.account.login.customer', [
-                'token' => $token,
-                'customerId' => $customerId,
-                'userId' => $userId,
-            ])
-        );
+        try {
+            $redirectUrl = sprintf(
+                '%s/%s',
+                $salesChannel->getDomains()->first()->getUrl(),
+                $this->generateUrl('frontend.account.login.customer', [
+                    'token' => $token,
+                    'customerId' => $customerId,
+                    'userId' => $userId,
+                ])
+            );
+        } catch (RouteNotFoundException) {
+            // fallback if storefront bundle is not installed
+            $redirectUrl = $salesChannel->getDomains()->first()->getUrl();
+        }
 
         return new JsonResponse([
             'token' => $token,
-            'redirectUrl' => $redirectUrlWithToken,
+            'redirectUrl' => $redirectUrl,
         ]);
     }
 
