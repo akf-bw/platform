@@ -144,8 +144,8 @@ class SalesChannelProxyController extends AbstractController
         return $response;
     }
 
-    #[Route(path: '/api/_proxy/login-as-customer-token-generate', name: 'api.proxy.login-as-customer-token-generate', methods: ['POST'], defaults: ['_acl' => ['api_proxy_login-as-customer']])]
-    public function loginAsCustomerTokenGenerate(RequestDataBag $data, Context $context): Response
+    #[Route(path: '/api/_proxy/generate-imitate-customer-token', name: 'api.proxy.generate-imitate-customer-token', methods: ['POST'], defaults: ['_acl' => ['api_proxy_login-as-customer']])]
+    public function generateLoginAsCustomerToken(RequestDataBag $data, Context $context): Response
     {
         $this->validateLoginInAsCustomerDataFields($data, $context);
 

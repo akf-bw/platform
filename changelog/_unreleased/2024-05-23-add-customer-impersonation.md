@@ -11,8 +11,13 @@ author_github: ugurkankya, sobyte, akf-bw
 * Added `Core/Checkout/Customer/LoginAsCustomerTokenGenerator` for generating secure token for the storefront to identify the customer
 * Added `Core/Checkout/Customer/SalesChannel/AbstractLoginAsCustomerRoute`
 * Added `Core/Checkout/Customer/SalesChannel/LoginAsCustomerRoute`
-* Added `/api/_proxy/login-as-customer-token-generate` to `Core/Framework/Api/Controller/SalesChannelProxyController`
-* Changed `Core/Framework/Api/ApiDefinition/Generator/Schema/StoreApi/paths/account.json` to include the `account/login/customer` route
+* Added `/api/_proxy/generate-imitate-customer-token` to `Core/Framework/Api/Controller/SalesChannelProxyController`
+* Changed `Core/Framework/Api/ApiDefinition/Generator/Schema/StoreApi/paths/account.json` to include the `account/login/imitate-customer` route
+* Changed `Core/System/SalesChannel/Context/SalesChannelContextFactory` to check for the `IMITATING_USER_ID`
+* Changed `Core/System/SalesChannel/Context/SalesChannelContextService` to add the const `IMITATING_USER_ID` and check for it
+* Changed `Core/System/SalesChannel/Context/SalesChannelContextServiceParameters` to add the `imitatingUserId` parameter
+* Changed `Core/System/SalesChannel/Context/CartRestorer` to update the `imitatingUserId`
+* Changed `Core/System/SalesChannel/SalesChannelContext` to include the `imitatingUserId` variable
 ___
 # Storefront
 * Added `/account/login/imitate-customer` to `Storefront/Controller/AuthController` for allowing to log in as customer
@@ -28,7 +33,7 @@ ___
 * Added new block `sw_customer_detail_actions_storefront_customer_login` in `module/sw-customer/page/sw-customer-detail/sw-customer-detail.html.twig`
 * Added new method `onClickButtonShowLoginAsCustomerModal` in `module/sw-customer/page/sw-customer-detail/index.js`
 * Added new method `onClickButtonCloseLoginAsCustomerModal` in `module/sw-customer/page/sw-customer-detail/index.js`
-* Added new method `loginAsCustomerTokenGenerate` in `core/service/api/store-context.api.service.js`
+* Added new method `generateLoginAsCustomerToken` in `core/service/api/store-context.api.service.js`
 * Added `loginAsCustomerModal` in `module/sw-customer/snippet/de-DE.json`
 * Added `buttonLoginAsCustomer` in `module/sw-customer/snippet/de-DE.json`
 * Added `notificationLoginAsCustomerErrorMessage` in `module/sw-customer/snippet/de-DE.json`

@@ -59,13 +59,13 @@ class StoreContextService extends ApiService {
         return this.httpClient.get(route, { ...additionalParams, headers });
     }
 
-    loginAsCustomerTokenGenerate(
+    generateLoginAsCustomerToken(
         customerId: string,
         salesChannelId: string,
         additionalParams = {},
         additionalHeaders = {},
     ) {
-        const route = '_proxy/login-as-customer-token-generate';
+        const route = '_proxy/generate-imitate-customer-token';
         const headers = this.getBasicHeaders(additionalHeaders);
 
         return this.httpClient

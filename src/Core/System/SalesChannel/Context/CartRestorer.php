@@ -127,6 +127,7 @@ class CartRestorer
                 'billingAddressId' => null,
                 'shippingAddressId' => null,
                 'permissions' => [],
+                'imitatingUserId' => $currentContext->getImitatingUserId(),
             ],
             $currentContext->getSalesChannel()->getId(),
             ($originalToken === null) ? $customerId : null,
@@ -139,6 +140,24 @@ class CartRestorer
     {
         $this->cartService->deleteCart($guestContext);
         $this->contextPersister->delete($guestContext->getToken(), $guestContext->getSalesChannelId(), $customerId);
+    }
+
+    private function updateImpersonation(SalesChannelContext $currentContext, SalesChannelContext $customerContext): void
+    {
+        if ($currentContext->getImitatingUserId() === $customerContext->getImitatingUserId()) {
+            return;
+        }
+
+        $this->contextPersister->save(
+            $customerContext->getToken(),
+            [
+                'imitatingUserId' => $currentContext->getImitatingUserId(),
+            ],
+            $customerContext->getSalesChannel()->getId(),
+            $customerContext->getCustomerId()
+        );
+
+        $customerContext->setImitatingUserId($currentContext->getImitatingUserId());
     }
 
     private function enrichCustomerContext(
@@ -163,6 +182,8 @@ class CartRestorer
         $restoredCart->addErrors(...array_values($guestCart->getErrors()->getPersistent()->getElements()));
 
         $this->deleteGuestContext($currentContext, $customerId);
+
+        $this->updateImpersonation($currentContext, $customerContext);
 
         $errors = $restoredCart->getErrors();
         $result = $this->cartRuleLoader->loadByToken($customerContext, $restoredCart->getToken());

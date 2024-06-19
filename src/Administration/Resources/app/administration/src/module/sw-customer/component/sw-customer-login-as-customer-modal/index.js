@@ -63,7 +63,7 @@ export default {
         },
 
         async onSalesChannelDomainMenuItemClick(salesChannelId, salesChannelDomainUrl) {
-            await Service('contextStoreService').loginAsCustomerTokenGenerate(
+            await Service('contextStoreService').generateLoginAsCustomerToken(
                 this.customer.id,
                 salesChannelId,
             ).then((response) => {
@@ -96,10 +96,10 @@ export default {
         },
 
         redirectToSalesChannelUrl(salesChannelDomainUrl, token, customerId, userId) {
-
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = `${salesChannelDomainUrl}/account/login/imitate-customer`;
+            form.target = '_blank';
             document.body.appendChild(form);
 
             this.createHiddenInput(form, 'token', token);
@@ -107,6 +107,7 @@ export default {
             this.createHiddenInput(form, 'userId', userId);
 
             form.submit();
+            form.remove();
         },
 
         createHiddenInput(form, name, value) {
@@ -115,6 +116,6 @@ export default {
             input.name = name;
             input.value = value;
             form.appendChild(input);
-        }
+        },
     },
 };

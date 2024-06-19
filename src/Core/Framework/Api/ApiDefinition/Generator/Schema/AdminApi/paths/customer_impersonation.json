@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": [],
     "paths": {
-        "\/_proxy\/login-as-customer-token-generate": {
+        "\/_proxy\/generate-imitate-customer-token": {
             "post": {
                 "tags": [
                     "Customer impersonation"
