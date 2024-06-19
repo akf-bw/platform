@@ -2,6 +2,7 @@
 
 namespace Shopware\Storefront\Controller;
 
+use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Checkout\Customer\Exception\BadCredentialsException;
 use Shopware\Core\Checkout\Customer\Exception\CustomerAuthThrottledException;
 use Shopware\Core\Checkout\Customer\Exception\CustomerNotFoundByHashException;
@@ -20,10 +21,12 @@ use Shopware\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaI
 use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 use Shopware\Core\Framework\Routing\RoutingException;
+use Shopware\Core\Framework\Util\Random;
 use Shopware\Core\Framework\Validation\DataBag\DataBag;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Shopware\Core\PlatformRequest;
+use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
 use Shopware\Core\System\SalesChannel\Context\SalesChannelContextServiceInterface;
 use Shopware\Core\System\SalesChannel\Context\SalesChannelContextServiceParameters;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
@@ -57,6 +60,7 @@ class AuthController extends StorefrontController
         private readonly AbstractLoginRoute $loginRoute,
         private readonly AbstractLogoutRoute $logoutRoute,
         private readonly AbstractLoginAsCustomerRoute $loginAsCustomerRoute,
+        private readonly AbstractSalesChannelContextFactory $salesChannelContextFactory,
         private readonly StorefrontCartFacade $cartFacade,
         private readonly AccountRecoverPasswordPageLoader $recoverPasswordPageLoader,
         private readonly SalesChannelContextServiceInterface $salesChannelContextService
@@ -321,6 +325,16 @@ class AuthController extends StorefrontController
     public function loginAsCustomer(RequestDataBag $data, SalesChannelContext $context, Request $request): Response
     {
         try {
+            // Clean the context of the previous customer's data
+            if ($context->getCustomer() instanceof CustomerEntity) {
+                $this->logoutRoute->logout($context, new RequestDataBag());
+
+                $context = $this->salesChannelContextFactory->create(
+                    Random::getAlphanumericString(32),
+                    $context->getSalesChannel()->getId(),
+                );
+            }
+
             $contextToken = $this->loginAsCustomerRoute->loginAsCustomer($data, $context)->getToken();
 
             $newContext = $this->salesChannelContextService->get(

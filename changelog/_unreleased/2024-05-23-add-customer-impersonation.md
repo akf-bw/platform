@@ -3,7 +3,7 @@ title: Add customer impersonation
 issue: NEXT-8593
 author: Ugurkan Kaya, Jan-Erik Spreng, Benjamin Wittwer
 author_email: j.spreng@seidemann-web.com, benjamin.wittwer@a-k-f.de
-author_github: ugurkankya, sobyte, akf-bw
+author_github: ugurkankya, sobyte, akf-bw, M-arcus
 ---
 # Core
 * Added `Core/Checkout/Customer/CustomerException::invalidToken` exception
