@@ -14,6 +14,7 @@ use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\Framework\Validation\DataValidationDefinition;
 use Shopware\Core\Framework\Validation\DataValidator;
 use Shopware\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Shopware\Core\System\SalesChannel\Context\CartRestorer;
 use Shopware\Core\System\SalesChannel\ContextTokenResponse;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,6 +36,7 @@ class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
         private readonly AccountService $accountService,
         private readonly LoginAsCustomerTokenGenerator $tokenGenerator,
         private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly CartRestorer $cartRestorer,
         private readonly DataValidator $validator
     ) {
     }
@@ -58,6 +60,7 @@ class LoginAsCustomerRoute extends AbstractLoginAsCustomerRoute
         $context->setImitatingUserId($userId);
 
         $newToken = $this->accountService->loginById($customerId, $context);
+        $this->cartRestorer->restore($customerId, $context);
 
         return new ContextTokenResponse($newToken);
     }
